@@ -10,6 +10,8 @@ sass:
 #disqus:
 #  shortname: consdata-tech
 
+google_analytics: UA-28387432-5
+
 collections:
   authors:
     output: true

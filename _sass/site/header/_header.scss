@@ -13,8 +13,8 @@ nav {
   width: 100%;
   height: $navbar-height-mobile;
   z-index: $header-z-index;
-  box-shadow: 0 0 5px $color-gray-80;
   background-color: $color-white;
+  border-bottom: 1px solid #ccc;
 
   @include tablet-and-desktop {
     height: $navbar-height-desktop;
@@ -37,7 +37,7 @@ nav {
     flex-direction: column;
     @include tablet-and-desktop {
       flex-direction: row;
-      padding: 0;
+      padding: 0 3px;
     }
   }
 

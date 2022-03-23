@@ -55,3 +55,6 @@ search:
 noResults:
   en: "No results :("
   pl: "Brak wyników wyszukiwania :("
+title:
+  en: "Kouncil - tech blog"
+  pl: "Kouncil - blog techniczny"

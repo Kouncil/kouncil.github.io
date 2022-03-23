@@ -4,7 +4,7 @@
   @import "post/post";
 
   @include desktop {
-    margin: 70px $blog-side-margins-desktop;
+    margin: 50px $blog-side-margins-desktop;
   }
 
   @include tablet {
@@ -14,6 +14,6 @@
 
 .narrower {
   @include desktop {
-    margin: 70px $narrower-side-margins-desktop;
+    margin: 5px $narrower-side-margins-desktop;
   }
 }
