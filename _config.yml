@@ -7,8 +7,8 @@ sass:
   style: compressed
   sourcemap: never
 
-#disqus:
-#  shortname: consdata-tech
+disqus:
+  shortname: kouncil-blog
 
 google_analytics: UA-28387432-5
 
