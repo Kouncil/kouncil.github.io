@@ -1,0 +1,44 @@
+title: Kouncil - blog techniczny
+baseurl: "/kouncil-blog/"
+url: "https://blog.kouncil.io"
+
+sass:
+  sass_dir: _sass
+  style: compressed
+  sourcemap: never
+
+#disqus:
+#  shortname: consdata-tech
+
+collections:
+  authors:
+    output: true
+
+defaults:
+  - scope:
+      path: ""
+      type: "authors"
+    values:
+      layout: "author"
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      image:
+        path: /assets/img/kouncil-logo.png
+        width: 1600
+        height: 400
+
+
+languages: ["en", "pl"]
+default_lang: "en"
+exclude_from_localization: ["assets/*", "_sass/*", "js/*"]
+parallel_localization: true
+
+  # Build settings
+markdown: kramdown
+plugins:
+  - jekyll-feed
+  - jekyll-autoprefixer
+  - jekyll-seo-tag
+  - jekyll-polyglot

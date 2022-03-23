@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="{{ site.active_lang | default: 'pl' }}">
+<script src="/js/lunr.min.js"></script>
+{%- include head.html -%}
+
+<body>
+
+{%- include header.html -%}
+
+<main class="page-content" aria-label="Content">
+    {{ content }}
+</main>
+
+<!--{%- include footer.html -%}-->
+{% include cookie-consent.html %}
+</body>
+</html>

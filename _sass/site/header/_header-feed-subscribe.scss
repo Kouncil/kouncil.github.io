@@ -1,0 +1,19 @@
+.feed-subscribe {
+  display: none;
+  @include desktop {
+    display: flex;
+    align-items: center;
+    .svg-icon {
+      padding: 0;
+    }
+  }
+  margin-left: $content-padding;
+  svg {
+    color: $color-very-dark-gray;
+  }
+  a:hover {
+    svg {
+      color: $color-logo-red;
+    }
+  }
+}

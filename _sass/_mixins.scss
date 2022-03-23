@@ -1,0 +1,44 @@
+@mixin tablet-and-desktop() {
+  @media (min-width: $tablet-breakpoint) {
+    @content;
+  }
+}
+
+@mixin desktop() {
+  @media (min-width: $desktop-breakpoint) {
+    @content;
+  }
+}
+
+@mixin tablet() {
+  @media (min-width: $tablet-breakpoint) and (max-width: $desktop-breakpoint - 1px) {
+    @content;
+  }
+}
+
+@mixin mobile() {
+  @media (max-width: $tablet-breakpoint - 1px) {
+    @content;
+  }
+}
+
+@mixin content-container() {
+  max-width: $mobile-content-width;
+
+  padding-right: $content-padding;
+  padding-left: $content-padding;
+
+  @include desktop {
+    margin: 0 20%;
+  }
+}
+
+@mixin flex-container() {
+  display: flex;
+  min-width: 1px;
+}
+
+@mixin job-offer-text($font-color) {
+  color: $font-color;
+  font-size: 1.2em;
+}

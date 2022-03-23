@@ -1,0 +1,154 @@
+@-webkit-keyframes image-blur {
+  0% {filter: blur(10px);}
+  100% {filter: blur(0)}
+}
+
+.post-big-title {
+  font-size: $post-title-font-size-desktop;
+  font-weight: bold;
+  letter-spacing: $general-letter-spacing;
+  @include desktop {
+    margin-bottom: 0;
+    line-height: $post-title-desktop-line-height;
+  }
+
+  @include mobile {
+    margin-bottom: 0;
+    font-size: $post-title-font-size-mobile;
+  }
+}
+
+.social-media-sharing {
+  @include flex-container;
+  justify-content: flex-end;
+  border-bottom: $separator-border;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.post-content {
+  @include flex-container;
+  flex-direction: column;
+  flex: 66%;
+  text-align: justify;
+  font-size: $post-font-size;
+  line-height: $post-content-line-height;
+  letter-spacing: $general-letter-spacing;
+
+  code {
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  p {
+    margin-bottom: 0.5em;
+    overflow-wrap: break-word;
+  }
+
+  p:first-child {
+    margin-top: $content-padding;
+  }
+
+  h2:first-child {
+    margin-top: $content-padding;
+  }
+
+  .post-highlight-image, .post-tile-did-you-know {
+    cursor: pointer;
+    transition: 0.3s;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
+
+.first-row {
+  margin-top: $double-content-padding;
+}
+
+.post-highlight-image {
+  width: 100%;
+  height: auto;
+  animation: image-blur 3s;
+  margin-bottom: 30px;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: $header-z-index + 1;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.9);
+}
+
+.modal-content {
+  display: block;
+  margin: auto;
+  background-color: $color-white;
+  animation-duration: 0.6s;
+  animation-name: zoom;
+}
+
+.close {
+  position: absolute;
+  top: 15px;
+  right: 35px;
+  cursor: pointer;
+  color: #f1f1f1;
+  font-size: 40px;
+  transition: 0.3s;
+}
+
+.close:hover,
+.close:focus {
+  color: #bbb;
+  text-decoration: none;
+}
+
+@keyframes zoom {
+  from {
+    transform: scale(0)
+  }
+  to {
+    transform: scale(1)
+  }
+}
+
+.post-content-container {
+  @include flex-container;
+}
+
+.post-content-left-pane {
+  @include flex-container;
+  flex: 66%;
+}
+
+.translation-details {
+  margin: $small-padding 0;
+  text-align: end;
+  font-style: italic;
+}
+
+.highlighted-box {
+  padding: $content-padding;
+  margin-top: $content-padding;
+  margin-bottom: $content-padding;
+  line-height: 2;
+}
+
+.did-you-know-box {
+  @extend .highlighted-box;
+  background-color: $color-logo-red;
+}
+
+.highlighted-box-description {
+  color: white;
+  font-weight: $font-weight-bold;
+  margin: 0;
+}

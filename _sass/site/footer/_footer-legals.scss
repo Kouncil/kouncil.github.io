@@ -1,0 +1,16 @@
+.legals {
+  @include flex-container;
+
+  @include desktop {
+    margin-left: 4*$small-padding;
+  }
+
+  a {
+    text-decoration: none;
+    color: $color-stormgray;
+    &:hover {
+      color: $color-white;
+    }
+  }
+
+}

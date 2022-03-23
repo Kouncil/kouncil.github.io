@@ -1,0 +1,36 @@
+.post-metadata {
+  $field-margin: 5px;
+
+  @include flex-container;
+  color: $color-light-gray;
+  align-items: center;
+
+  .article-author {
+    @include flex-container;
+    align-items: center;
+  }
+
+  .author-name-metadata {
+    font-size: 1.3em;
+    letter-spacing: $general-letter-spacing;
+    font-weight: bold;
+  }
+
+  .author-separator {
+    margin-left: $field-margin;
+  }
+
+  .author-image {
+    margin-left: $field-margin;
+    width: $small-author-image-size;
+    height: $small-author-image-size;
+    border-radius: 50%;
+    overflow: hidden;
+
+    img {
+      max-width: $small-author-image-size;
+      max-height: $small-author-image-size;
+    }
+  }
+
+}

@@ -1,0 +1,74 @@
+---
+layout: default
+comments: true
+---
+{% assign post = page %}
+{% assign author = site.authors | where: "short_name", post.author | first %}
+{% assign assets = post.path | remove: "_posts/" | remove: ".md" %}
+<div class="blog">
+    <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+        <header>
+            {% include main-page-link.html %}
+            <div class="row">
+                <div class="col-15">
+                    <h1 class="post-big-title p-name" itemprop="name headline">{{ page.title | escape }}</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-15">
+                    {% include post_metadata.html %}
+                </div>
+                <div class="col-5">
+                    {% include language_options.html %}
+                </div>
+            </div>
+        </header>
+        <div itemprop="articleBody" class="post-content-container">
+            <div class="post-content-left-pane">
+                <div class="post-content">
+                    <div class="{% if post.didyouknow %} big-post-tile-did-you-know {% elsif post.afterhours %} big-post-tile-after-hours {% endif %} post-highlight-image">
+                        <img src="{{post.image}}" alt="postimage"/>
+                    </div>
+                    <div class="social-media-sharing">
+                        {% include share_bar.html %}
+                    </div>
+                    <div id="myModal" class="modal">
+                        <i id="modal-close" class="fa fa-times close" aria-hidden="true"
+                           onclick="closeModal()"></i>
+                        <img class="modal-content">
+                    </div>
+                    {{ content }}
+                    {% if post.interpreter %}
+                    {% include translation-details.html %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="sidebar">
+                {% include latest_posts.html %}
+            </div>
+        </div>
+        <div class="post-post-section-mobile">
+            {% include latest_posts.html %}
+        </div>
+        {% include author_bio.html %}
+        {%- if site.disqus.shortname -%}
+            {%- include disqus_comments.html -%}
+        {%- endif -%}
+    </article>
+</div>
+<script>
+    const language = '{{site.active_lang}}';
+
+    function zoomImage($event) {
+        const modal = document.getElementById('myModal');
+        modal.getElementsByTagName('img')[0].src = $event.target.src;
+        modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('myModal').style.display = 'none';
+    }
+
+    const postImages = document.querySelectorAll('.post-content img');
+    postImages.forEach(x => x.addEventListener('click', zoomImage));
+</script>
