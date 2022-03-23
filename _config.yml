@@ -1,5 +1,5 @@
 title: Kouncil - blog techniczny
-baseurl: "/kouncil-blog/"
+baseurl: ""
 url: "https://blog.kouncil.io"
 
 sass:
