@@ -13,23 +13,33 @@
                 </div>
             </div>
             <div id="header-links" class="mobile-nav">
-                <div class="feed-subscribe">
-                    <a href="{{ "/feed.xml" | relative_url }}">
-                    <svg class="svg-icon">
-                        <use xlink:href="{{ '/assets/minima-social-icons.svg#rss' | relative_url }}"></use>
-                    </svg>
-                    </a>
+                <div class="nav navbar-nav">
+                    <div class="nav-link"><a href="https://kouncil.io/#kouncil">KOUNCIL</a></div>
+                    <div class="nav-link hide-on-mobile"><a href="https://kouncil.io/#features" class="active">FEATURES</a></div>
+                    <div class="nav-link"><a href="https://kouncil.io/#enterprise-edition">ENTERPRISE EDITION</a></div>
+                    <div class="nav-link"><a href="/">BLOG</a></div>
+                    <div class="nav-link"><a href="https://docs.kouncil.io/">DOCUMENTATION</a></div>
+                    <div class="nav-link"><a href="https://kouncil-demo.web.app/">DEMO</a></div>
+                    <div class="nav-link"><a href="https://kouncil.io/#contact" target="_blank">CONTACT</a></div>
                 </div>
-                {% if page.layout != "post" %}
+                <div class="header-additional-links">
+                    <div class="feed-subscribe">
+                        <a href="{{ "/feed.xml" | relative_url }}">
+                        <svg class="svg-icon">
+                            <use xlink:href="{{ '/assets/minima-social-icons.svg#rss' | relative_url }}"></use>
+                        </svg>
+                        </a>
+                    </div>
+                    {% if page.layout != "post" %}
                     {% if site.active_lang == "pl" %}
-                        <a class="language-switch" onclick="navigate(' {{ page.url }}')">EN</a>
+                    <a class="language-switch" onclick="navigate(' {{ page.url }}')">EN</a>
                     {% else %}
-                        <a class="language-switch" onclick="navigate('/pl{{ page.url }}')">PL</a>
+                    <a class="language-switch" onclick="navigate('/pl{{ page.url }}')">PL</a>
                     {% endif %}
-                {% endif %}
+                    {% endif %}
+                </div>
             </div>
-
-        </div>
+            </div>
     </div>
 </nav>
 <script>

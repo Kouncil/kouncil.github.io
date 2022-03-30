@@ -1,6 +1,32 @@
 #header-links {
-  @include flex-container;
-  align-items: center;
+  $mobile-link-height: 40px;
+  position: relative;
+
+  @include desktop {
+    @include flex-container;
+    align-items: center;
+    height: 100%;
+  }
+
+  @include mobile {
+    &.mobile-nav {
+      @include flex-container;
+      position: absolute;
+      height: 0;
+      transition: height 1s;
+      overflow: hidden;
+      background-color: $color-russian-black;
+      width: 100%;
+      margin-left: -$content-padding;
+      border-top: 1px solid $color-medium-gray;
+      padding-left: $content-padding;
+      padding-right: $content-padding;
+    }
+
+    &.show {
+      height: $mobile-link-height * 5;
+    }
+  }
 
   .nav {
     @include flex-container;
@@ -8,38 +34,64 @@
     @include tablet-and-desktop {
       flex-direction: row;
       width: 100%;
-      margin-left: $content-padding;
+      height: 100%;
     }
   }
 
   .language-switch {
+    color: black;
     display: inline-block;
-    font-size: 18px;
+    font-size: 17px;
     margin-left: $small-padding;
     cursor: pointer;
     font-weight: bold;
+
+
   }
 
   .nav-link {
     @include flex-container;
-    min-height: 40px;
+    min-height: $mobile-link-height;
+    align-items: center;
+    cursor: pointer;
+    box-sizing: border-box;
     @include tablet-and-desktop {
       min-height: 1px;
-      padding: 6px;
-      @include desktop {
-        padding: 8px;
+      flex-direction: column;
+      flex: 1 0 auto;
+      justify-content: center;
+      border-bottom: 2px solid transparent;
+      margin-right: 30px;
+      &:last-of-type {
+        margin-right: 27px;
+      }
+
+      &:hover {
+        border-color: black;
       }
     }
-    align-items: center;
 
     a {
-      color: $color-very-dark-gray;
+      font-size: 17px;
+      color: black;
       text-transform: uppercase;
+      font-weight: bold;
+    }
 
-      &.active,
-      &:hover {
-        color: $color-logo-red;
+    .hide-on-mobile {
+      display: none;
+      @include desktop {
+        @include flex-container;
       }
     }
   }
+}
+
+.header-additional-links {
+  @include flex-container;
+  align-items: center;
+  height: 100%;
+  right: -40px;
+  position: absolute;
+  border-bottom: 2px solid transparent;
 }

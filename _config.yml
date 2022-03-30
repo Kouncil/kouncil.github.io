@@ -32,12 +32,12 @@ defaults:
         height: 400
 
 
-languages: ["en", "pl"]
+languages: [ "en", "pl" ]
 default_lang: "en"
-exclude_from_localization: ["assets/*", "_sass/*", "js/*"]
+exclude_from_localization: [ "assets/*", "_sass/*", "js/*" ]
 parallel_localization: true
 
-  # Build settings
+# Build settings
 markdown: kramdown
 plugins:
   - jekyll-feed
