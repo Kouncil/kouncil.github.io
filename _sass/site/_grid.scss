@@ -1,16 +1,33 @@
+.page-content {
+  background-color: $background-color;
+}
+
 .row {
   @include flex-container;
   flex-flow: row wrap;
-  justify-content: flex-start;
+  justify-content: center;
   margin-bottom: $double-content-padding;
 }
 
 .first-row {
+  background-color: white;
   @include desktop {
-    margin-bottom: $first-post-bottom-margin;
+    flex-direction: column;
+    align-items: center;
+    padding: 64px $blog-side-margins-desktop;
   }
   @include mobile {
-    margin: 0;
+    margin: 70px $blog-side-margins-tablet;
+  }
+
+  .blog-name-tile {
+    @include flex-container;
+    justify-content: center;
+    align-items: center;
+    font-size: 48px;
+    font-weight: 600;
+    margin-bottom: 64px;
+    color: $color-black;
   }
 }
 
@@ -21,7 +38,8 @@
   @include tablet {
     flex: 45%;
   }
-  flex: 31%;
+  max-width: 400px;
+  background-color: white;
 }
 
 .col-15 {
@@ -47,5 +65,7 @@
   @include mobile {
     display: none;
   }
+  width: 400px;
+  background-color: $background-color;
   margin: $post-tile-margin-top $small-padding $post-tile-margin-bottom;
 }

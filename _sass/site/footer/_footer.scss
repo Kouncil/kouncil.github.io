@@ -4,14 +4,18 @@ footer {
   @import "footer-legals";
   @import "footer-copyright";
 
-  background-color: $color-grape;
+  * {
+    font-family: "Inter", Helvetica, Arial, sans-serif;
+  }
+  background-color: $background-color;
+  border-top: 1px solid rgba(97, 63, 195, 0.2);
 
   .footer-item {
     @include flex-container;
     flex-direction: column;
     letter-spacing: 1px;
-
     width: 100%;
+
     .label {
       @include flex-container;
       color: $color-white;
@@ -35,14 +39,10 @@ footer {
   .container {
     @include content-container;
     @include flex-container;
-    flex-direction: column;
+
     @include tablet-and-desktop {
       flex-direction: row;
+      padding: 120px 100px;
     }
-    justify-content: center;
-    align-items: flex-start;
-
-    padding-top: 30px;
-    padding-bottom: 30px;
   }
 }

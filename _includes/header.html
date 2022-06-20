@@ -4,7 +4,7 @@
             <div class="header-brand">
                 <div class="nav navbar-nav">
                     <div class="nav-link"><a href="https://kouncil.io/">
-                        <img class="header-logo" src="/assets/img/kouncil-logo.png" alt="Logo" />
+                        <img class="header-logo" src="/assets/img/kouncil-logo.png" alt="Logo"/>
                     </a></div>
                 </div>
 
@@ -14,32 +14,21 @@
             </div>
             <div id="header-links" class="mobile-nav">
                 <div class="nav navbar-nav">
-                    <div class="nav-link"><a href="https://kouncil.io/#kouncil">KOUNCIL</a></div>
-                    <div class="nav-link hide-on-mobile"><a href="https://kouncil.io/#features" class="active">FEATURES</a></div>
-                    <div class="nav-link"><a href="https://kouncil.io/#enterprise-edition">ENTERPRISE EDITION</a></div>
-                    <div class="nav-link"><a href="/">BLOG</a></div>
-                    <div class="nav-link"><a href="https://docs.kouncil.io/">DOCUMENTATION</a></div>
-                    <div class="nav-link"><a href="https://kouncil-demo.web.app/">DEMO</a></div>
-                    <div class="nav-link"><a href="https://kouncil.io/#contact" target="_blank">CONTACT</a></div>
+                    <div class="nav-link"><a href="https://kouncil.io/#kouncil">Home</a></div>
+                    <div class="nav-link hide-on-mobile"><a href="https://kouncil.io/#features" class="active">Features</a></div>
+                    <div class="nav-link"><a href="https://kouncil.io/#enterprise-edition">Blog</a></div>
+                    <div class="nav-link"><a href="https://docs.kouncil.io/">Documentation</a></div>
+                    <div class="nav-link"><a href="https://kouncil-demo.web.app/">Demo</a></div>
                 </div>
-                <div class="header-additional-links">
-                    <div class="feed-subscribe">
-                        <a href="{{ "/feed.xml" | relative_url }}">
-                        <svg class="svg-icon">
-                            <use xlink:href="{{ '/assets/minima-social-icons.svg#rss' | relative_url }}"></use>
-                        </svg>
-                        </a>
+            </div>
+            <div class="header-contact-button-container">
+                <a href="https://kouncil.io/#contact" target="_blank">
+                    <div class="primary-button-small">
+                        Contact us
                     </div>
-                    {% if page.layout != "post" %}
-                    {% if site.active_lang == "pl" %}
-                    <a class="language-switch" onclick="navigate(' {{ page.url }}')">EN</a>
-                    {% else %}
-                    <a class="language-switch" onclick="navigate('/pl{{ page.url }}')">PL</a>
-                    {% endif %}
-                    {% endif %}
-                </div>
+                </a>
             </div>
-            </div>
+        </div>
     </div>
 </nav>
 <script>

@@ -12,7 +12,7 @@ $navbar-height-mobile: 42px;
 $navbar-height-desktop: 65px;
 $header-z-index: 99;
 $narrower-side-margins-desktop: 25%;
-$blog-side-margins-desktop: 25%;
+$blog-side-margins-desktop: 100px;
 $blog-side-margins-tablet: 15%;
 
 // Paddings, margins
@@ -45,7 +45,7 @@ $first-post-bottom-margin: 40px;
 $big-author-image-size: 75px;
 $medium-author-image-size: 50px;
 $small-author-image-size: 24px;
-$separator-border: 3px solid $color-logo-red;
+$separator-border: 3px solid $color-primary;
 $inactive-input-bottom-border: 2px solid $color-dark-gray;
 $post-tile-hover-shadow: rgba(0, 0, 0, 0.22) 0 19px 30px;
 

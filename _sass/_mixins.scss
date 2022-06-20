@@ -25,11 +25,9 @@
 @mixin content-container() {
   max-width: $mobile-content-width;
 
-  padding-right: $content-padding;
-  padding-left: $content-padding;
-
   @include desktop {
-    margin: 0 25%;
+    width: 1440px;
+    margin: 0 auto;
   }
 }
 
@@ -41,4 +39,32 @@
 @mixin job-offer-text($font-color) {
   color: $font-color;
   font-size: 1.2em;
+}
+
+@mixin round-post-tile() {
+  border-radius: 12px;
+}
+
+@mixin primary-button() {
+  @include flex-container;
+  font-weight: 500;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  background-color: $color-primary;
+  color: $color-white;
+
+  &:focus {
+    background-color: #85B93D;
+  }
+
+  &:active {
+    background-color: #9CD00F;
+  }
+
+  &:disabled {
+    opacity: 0.25;
+  }
 }

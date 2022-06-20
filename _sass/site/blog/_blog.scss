@@ -1,15 +1,8 @@
 .blog {
   @import "post-list";
   @import "post-metadata";
+  @import "post-big-tile";
   @import "post/post";
-
-  @include desktop {
-    margin: 50px $blog-side-margins-desktop;
-  }
-
-  @include tablet {
-    margin: 70px $blog-side-margins-tablet;
-  }
 }
 
 .narrower {

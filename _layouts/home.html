@@ -9,9 +9,14 @@ layout: default
 
     {{ content }}
     <div class="blog">
-        <div class="row first-row">
-            {% assign firstPost=site.posts | where: "lang", site.active_lang | first %}
-            {% include big-post-tile.html post=firstPost %}
+        <div class="first-row">
+            <div class="blog-name-tile">
+                Kouncil Blog
+            </div>
+            <div class="big-post-tile-container">
+                {% assign firstPost=site.posts | where: "lang", site.active_lang | first %}
+                {% include big-post-tile.html post=firstPost homePagePost=true %}
+            </div>
         </div>
         {% assign rows = site.posts.size | divided_by: 3.0 | ceil %}
         <div class="row">
