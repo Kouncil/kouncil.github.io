@@ -3,6 +3,7 @@ footer {
   @import "footer-social-buttons";
   @import "footer-legals";
   @import "footer-copyright";
+  @import "footer-links";
 
   * {
     font-family: "Inter", Helvetica, Arial, sans-serif;
@@ -14,7 +15,6 @@ footer {
     @include flex-container;
     flex-direction: column;
     letter-spacing: 1px;
-    width: 100%;
 
     .label {
       @include flex-container;
@@ -33,12 +33,22 @@ footer {
       color: $color-stormgray;
       font-size: 16px;
       font-weight: 400;
+
+      p {
+        font-weight: $font-weight-light;
+        &:first-of-type {
+          margin-top: 0;
+          color: $color-black;
+          font-weight: $font-weight-regular;
+        }
+      }
     }
   }
 
   .container {
     @include content-container;
     @include flex-container;
+    justify-content: space-between;
 
     @include tablet-and-desktop {
       flex-direction: row;
