@@ -1,8 +1,10 @@
 <footer>
-    <div class="container">
+    <div class="footer-container">
         <div class="footer-item company">
             <div class="label">
-                <img src="/assets/img/kouncil-logo.png"/>
+                <a href="https://kouncil.io/" target="_blank" rel="noreferrer">
+                    <img src="/assets/img/kouncil-logo.png"/>
+                </a>
             </div>
         </div>
         <div class="footer-item">
@@ -29,41 +31,36 @@
         </div>
         <div class="footer-item links">
             <div class="item-content">
-                <p>Blog</p>
-                <p>Documentation</p>
-                <p>Demo</p>
-                <p>Pricing</p>
+                <a class="footer-link"><p>Blog</p></a>
+                <a class="footer-link"><p>Documentation</p></a>
+                <a class="footer-link"><p>Demo</p></a>
+                <a class="footer-link"><p>Pricing</p></a>
             </div>
         </div>
         <div class="footer-item social-buttons">
             <div class="label">
                 {{ site.data.translations['stayInTouch'][page.lang] }}
             </div>
-            <div class="item-content">
-                <div class="social-buttons-container">
-                    <div class="social-button-wrapper">
-                        <a class="social-btn" target="_blank" href="https://www.facebook.com/consdatacom"
-                           title="Facebook">
-                            <i class="fa fa-facebook"></i>
-                        </a>
-                    </div>
-                    <div class="social-button-wrapper">
-                        <a class="social-btn" target="_blank"
-                           href="https://www.youtube.com/channel/UCv4d_uCiLdDkOFk8NtDsU_w" title="Youtube">
-                            <i class="fa fa-youtube"></i>
-                        </a>
-                    </div>
-                    <div class="social-button-wrapper">
-                        <a class="social-btn" target="_blank" href="https://www.linkedin.com/company/1456906"
-                           title="Linkedin">
-                            <i class="fa fa-linkedin"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
+
         </div>
     </div>
-    <div class="copyright">
-        Copyrights © {{ 'now' | date: "%Y" }} Kouncil. All rights reserved.
+    <div class="copyright-container">
+        <div class="copyright">
+            Copyrights © {{ 'now' | date: "%Y" }} Kouncil. All rights reserved.
+            <div class="social-buttons">
+                <a class="social-btn" target="_blank" href="https://www.facebook.com/consdatacom"
+                   title="Facebook">
+                    <i class="fa-brands fa-facebook-f"></i>
+                </a>
+                <a class="social-btn" target="_blank" href="https://www.linkedin.com/company/1456906"
+                   title="Linkedin">
+                    <i class="fa-brands fa-linkedin"></i>
+                </a>
+                <a class="social-btn" target="_blank"
+                   href="https://www.youtube.com/channel/UCv4d_uCiLdDkOFk8NtDsU_w" title="Youtube">
+                    <i class="fa-brands fa-youtube"></i>
+                </a>
+            </div>
+        </div>
     </div>
 </footer>

@@ -1,13 +1,59 @@
+.copyright-container {
+  @include content-container;
+  @include flex-container;
+  justify-content: space-between;
+
+  border-top: $small-separator-border;
+  padding: 0 100px;
+}
+
 .copyright {
   @include flex-container;
-  border-top: 1px solid rgba(97, 63, 195, 0.2);
+  justify-content: space-between;
+  width: 100%;
   background-color: $background-color;
   color: $color-stormgray;
-  padding: 0 100px;
-  width: 100%;
   height: 80px;
   align-items: center;
   font-size: 14px;
   letter-spacing: 2px;
   font-weight: 300;
+
+  .social-buttons {
+    @include flex-container;
+    $social-button-size: 36px;
+
+    @include desktop {
+      margin-right: 2*$small-padding;
+    }
+
+    .social-buttons-container {
+      @include flex-container;
+      flex-direction: row;
+      margin-top: 20px;
+    }
+
+    .social-btn {
+      @include flex-container;
+      align-items: center;
+      justify-content: center;
+
+      color: $color-primary;
+      line-height: 46px;
+      text-align: center;
+      font-size: 24px;
+      margin-right: 10px;
+
+      .fa {
+        font-size: 24px;
+        &.fa-linkedin {
+          margin-left: 2px;
+        }
+        &.fa-youtube {
+          margin-left: 2px;
+        }
+      }
+    }
+  }
+
 }

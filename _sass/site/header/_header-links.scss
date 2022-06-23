@@ -88,8 +88,7 @@
 .header-contact-button-container {
   @include flex-container;
   align-items: center;
-
-  .header-contact-button {
-
+  @include mobile {
+    display: none;
   }
 }

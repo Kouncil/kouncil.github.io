@@ -1,6 +1,7 @@
 .links {
-  p {
+  .footer-link {
     font-weight: $font-weight-regular;
     color: $color-black;
+    cursor: pointer;
   }
 }
