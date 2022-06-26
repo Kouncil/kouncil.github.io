@@ -12,6 +12,7 @@
     justify-content: center;
     @include mobile {
       flex-direction: column;
+      padding: 5px;
     }
   }
 
@@ -41,13 +42,15 @@
   @include tablet-and-desktop {
     width: 610px;
     padding: $content-padding;
-  }
-
-  *:not(.small-author-image) {
-    @include tablet-and-desktop {
+    *:not(.small-author-image) {
       margin: 0;
     }
   }
+
+  @include mobile {
+    padding: 0 15px;
+  }
+
 
   .post-title {
     font-weight: $font-weight-semibold;

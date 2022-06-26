@@ -7,6 +7,10 @@
   flex-flow: row wrap;
   justify-content: center;
   margin-bottom: $double-content-padding;
+
+  @include mobile {
+    padding: 0 20px;
+  }
 }
 
 .first-row {
@@ -18,7 +22,7 @@
   }
   @include mobile {
     margin: 0;
-    padding: 80px 0;
+    padding: 75px 0;
   }
 
   .blog-name-tile {

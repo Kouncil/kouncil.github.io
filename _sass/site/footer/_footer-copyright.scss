@@ -4,7 +4,10 @@
   justify-content: space-between;
 
   border-top: $small-separator-border;
-  padding: 0 100px;
+
+  @include tablet-and-desktop {
+    padding: 0 100px;
+  }
 }
 
 .copyright {
@@ -46,9 +49,11 @@
 
       .fa {
         font-size: 24px;
+
         &.fa-linkedin {
           margin-left: 2px;
         }
+
         &.fa-youtube {
           margin-left: 2px;
         }

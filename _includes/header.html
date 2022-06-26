@@ -7,10 +7,6 @@
                         <img class="header-logo" src="/assets/img/kouncil-logo.png" alt="Logo"/>
                     </a></div>
                 </div>
-
-                <div class="mobile-search">
-                    {% include search-component-mobile.html %}
-                </div>
             </div>
             <div id="header-links" class="mobile-nav">
                 <div class="nav navbar-nav">
@@ -31,9 +27,3 @@
         </div>
     </div>
 </nav>
-<script>
-    function navigate(baseUrl) {
-        const queryParams = window.location.search;
-        window.location.href = baseUrl + queryParams;
-    }
-</script>

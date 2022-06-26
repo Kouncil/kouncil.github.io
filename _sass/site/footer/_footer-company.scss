@@ -3,4 +3,8 @@
   img {
     height: 20px;
   }
+
+  @include mobile {
+    margin-bottom: 40px;
+  }
 }
