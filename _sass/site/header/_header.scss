@@ -10,11 +10,14 @@ nav {
 
   position: sticky;
   top: 0;
-  width: 100%;
   height: $navbar-height-mobile;
   z-index: $header-z-index;
   background-color: $color-white;
   border-bottom: 1px solid #ccc;
+
+  @include mobile {
+    padding: 0 20px;
+  }
 
   @include tablet-and-desktop {
     height: $navbar-height-desktop;

@@ -8,6 +8,15 @@
   @include tablet-and-desktop {
     padding: 0 100px;
   }
+
+  @include mobile {
+    padding: 40px 20px;
+  }
+}
+
+.full-width-footer {
+  width: 100%;
+  border-top: $small-separator-border;
 }
 
 .copyright {
@@ -15,16 +24,48 @@
   justify-content: space-between;
   width: 100%;
   background-color: $background-color;
-  color: $color-stormgray;
   height: 80px;
   align-items: center;
   font-size: 14px;
-  letter-spacing: 2px;
   font-weight: 300;
+
+  span {
+    color: $color-stormgray;
+  }
+
+  @include mobile {
+    flex-direction: column;
+    align-items: flex-start;
+    height: 68px;
+  }
+
+  .copyright-text {
+    @include flex-container;
+    @include mobile {
+      width: 100%;
+    }
+  }
+
+  .copyright-links {
+    @include mobile {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    a {
+      color: $color-stormgray;
+      font-weight: normal;
+      cursor: pointer;
+
+      &:hover {
+        color: $color-primary;
+      }
+    }
+  }
 
   .social-buttons {
     @include flex-container;
-    $social-button-size: 36px;
 
     @include desktop {
       margin-right: 2*$small-padding;
@@ -47,9 +88,11 @@
       font-size: 24px;
       margin-right: 10px;
 
-      .fa {
-        font-size: 24px;
+      @include mobile {
+        font-size: 16px;
+      }
 
+      .fa {
         &.fa-linkedin {
           margin-left: 2px;
         }
@@ -59,6 +102,10 @@
         }
       }
     }
+  }
+
+  .separator {
+    margin: 0 10px;
   }
 
 }

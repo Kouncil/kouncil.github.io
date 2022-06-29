@@ -28,6 +28,7 @@ footer {
         margin-bottom: 10px;
       }
     }
+
     .item-content {
       color: $color-stormgray;
       font-size: 16px;
@@ -41,6 +42,10 @@ footer {
           font-weight: $font-weight-regular;
         }
       }
+
+      @include mobile {
+        margin-bottom: 45px;
+      }
     }
   }
 
@@ -49,7 +54,6 @@ footer {
     @include flex-container;
     flex-direction: column;
     justify-content: space-between;
-
     padding: 64px 20px 0;
 
     @include tablet-and-desktop {

@@ -3,5 +3,9 @@
     font-weight: $font-weight-regular;
     color: $color-black;
     cursor: pointer;
+
+    &:hover {
+      color: $color-primary;
+    }
   }
 }

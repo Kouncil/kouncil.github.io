@@ -13,4 +13,12 @@ article {
   @import "post-share-bar";
   @import "post-disqus";
   @import "post-languages";
+
+  background-color: white;
+
+  @include tablet-and-desktop {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 64px 100px;
+  }
 }

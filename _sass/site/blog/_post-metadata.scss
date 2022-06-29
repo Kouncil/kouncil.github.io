@@ -22,14 +22,14 @@
 
   .author-image {
     margin-left: $field-margin;
-    width: $small-author-image-size;
-    height: $small-author-image-size;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     overflow: hidden;
 
     img {
-      max-width: $small-author-image-size;
-      max-height: $small-author-image-size;
+      max-width: 48px;
+      max-height: 48px;
     }
   }
 

@@ -38,23 +38,8 @@
             </div>
         </div>
     </div>
-    <div class="copyright-container">
-        <div class="copyright">
-            Copyrights © {{ 'now' | date: "%Y" }} Kouncil. All rights reserved.
-            <div class="social-buttons">
-                <a class="social-btn" target="_blank" href="https://www.facebook.com/consdatacom"
-                   title="Facebook">
-                    <i class="fa-brands fa-facebook-f"></i>
-                </a>
-                <a class="social-btn" target="_blank" href="https://www.linkedin.com/company/1456906"
-                   title="Linkedin">
-                    <i class="fa-brands fa-linkedin"></i>
-                </a>
-                <a class="social-btn" target="_blank"
-                   href="https://www.youtube.com/channel/UCv4d_uCiLdDkOFk8NtDsU_w" title="Youtube">
-                    <i class="fa-brands fa-youtube"></i>
-                </a>
-            </div>
-        </div>
+    <div class="full-width-footer">
+        {% include footer_copyright_desktop.html %}
+        {% include footer_copyright_mobile.html %}
     </div>
 </footer>

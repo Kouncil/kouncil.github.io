@@ -38,3 +38,15 @@ main {
   padding-bottom: $content-padding;
   border-bottom: $separator-border;
 }
+
+.mobile {
+  @include tablet-and-desktop {
+    display: none !important;
+  }
+}
+
+.desktop {
+  @include mobile {
+    display: none !important;
+  }
+}
