@@ -22,9 +22,7 @@
 .social-media-sharing {
   @include flex-container;
   justify-content: flex-end;
-  border-bottom: $separator-border;
   font-size: 1.2em;
-  font-weight: bold;
 }
 
 .post-content {

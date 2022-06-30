@@ -1,9 +1,20 @@
+.post-info-container {
+  @include flex-container;
+  flex: 67%;
+  justify-content: space-between;
+}
+
+.post-metadata-author {
+  @include flex-container;
+}
+
 .post-metadata {
   $field-margin: 5px;
-
   @include flex-container;
-  color: $color-light-gray;
+  flex: 1 0 auto;
+  justify-content: space-between;
   align-items: center;
+  color: $color-light-gray;
 
   .article-author {
     @include flex-container;

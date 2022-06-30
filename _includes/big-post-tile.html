@@ -33,11 +33,6 @@
                 <span>{% include post-date.html date=include.post.date lang=site.active_lang %}</span>
             </div>
         </div>
-        <a href="{{ include.post.url | relative_url }}">
-            <div class="read-more">
-                <span>{{ site.data.translations['readMore'][site.active_lang] }}</span>
-                <img src="/assets/img/arrow-left.svg" alt="arrow" />
-            </div>
-        </a>
+        {% include read-more.html %}
     </div>
 </div>

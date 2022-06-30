@@ -2,8 +2,8 @@ recommendedPosts:
   en: "Similar posts"
   pl: "Podobne wpisy"
 newestPosts:
-  en: "Newest posts"
-  pl: "Najnowsze wpisy"
+  en: "More on the blog"
+  pl: "Więcej na blogu"
 announcements:
   en: "Announcements"
   pl: "Ogłoszenia"
@@ -29,7 +29,7 @@ privacyPolicy:
   en: "PRIVACY POLICY"
   pl: "POLITYKA PRYWATNOŚCI"
 allPosts:
-  en: "All posts"
+  en: "All blogposts"
   pl: "Wszystkie wpisy"
 newsletterSignUp:
   en: "Sign up for a tech newsletter"

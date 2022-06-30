@@ -13,18 +13,6 @@
                 {{author.name}}
             </a>
             {% endif %}
-            <div class="social-buttons">
-                {% if author.github %}
-                <div class="author-github">
-                    <a href="https://github.com/{{ author.github | cgi_escape | escape }}"
-                       title="{{ author.github | escape }}">
-                        <svg class="svg-icon grey">
-                            <use xlink:href="{{ '/assets/minima-social-icons.svg#github' | relative_url }}"></use>
-                        </svg>
-                        {{ author.github }}</a>
-                </div>
-                {% endif %}
-            </div>
         </div>
         <div class="content">
             {% if author.bio %}

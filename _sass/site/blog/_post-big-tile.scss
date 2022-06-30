@@ -57,18 +57,4 @@
     font-size: 32px;
     letter-spacing: $general-letter-spacing;
   }
-
-  .read-more {
-    display: flex;
-    justify-content: space-between;
-    width: 119px;
-    border-bottom: 2px solid $color-primary;
-    padding-bottom: 7px;
-
-    span {
-      color: $color-primary;
-      font-weight: $font-weight-semibold;
-      font-size: 16px;
-    }
-  }
 }

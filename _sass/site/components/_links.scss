@@ -1,0 +1,19 @@
+a {
+  cursor: pointer;
+
+  &:hover {
+    span, p {
+      color: $color-primary;
+    }
+  }
+}
+
+.main-page-link-container {
+  @include flex-container;
+  width: 140px;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 16px;
+  font-weight: $font-weight-semibold;
+  color: $color-primary;
+}
