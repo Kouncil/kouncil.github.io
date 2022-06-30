@@ -121,6 +121,10 @@
 
 .post-content-container {
   @include flex-container;
+
+  @include mobile {
+    padding: 0 20px;
+  }
 }
 
 .post-content-left-pane {
@@ -129,9 +133,10 @@
 }
 
 .translation-details {
+  border-top: $small-separator-border;
+  padding-top: 40px;
+  font-size: $post-font-size;
   margin: $small-padding 0;
-  text-align: end;
-  font-style: italic;
 }
 
 .highlighted-box {

@@ -1,6 +1,9 @@
 .post-info-container {
   @include flex-container;
   flex: 67%;
+  @include mobile {
+    flex: 100%;
+  }
   justify-content: space-between;
 }
 

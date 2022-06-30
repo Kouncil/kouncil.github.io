@@ -25,6 +25,12 @@
   margin-bottom: 40px;
   letter-spacing: $general-letter-spacing;
   border-bottom: 1px solid rgba(97, 63, 195, 0.2);
+
+  @include mobile {
+    font-size: 24px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+  }
 }
 
 .sidebar-post {
@@ -49,7 +55,8 @@
 }
 
 .post-post-section-mobile {
-  margin-bottom: $content-padding;
+  padding: 20px;
+  background-color: white;
   @include desktop {
     display: none;
   }

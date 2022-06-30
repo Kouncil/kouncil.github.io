@@ -8,4 +8,8 @@
     font-weight: $font-weight-semibold;
     color: $color-primary;
   }
+
+  @include mobile {
+    margin-top: 40px;
+  }
 }

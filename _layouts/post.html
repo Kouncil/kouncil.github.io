@@ -14,14 +14,16 @@ comments: true
                     <h1 class="post-big-title p-name" itemprop="name headline">{{ page.title | escape }}</h1>
                 </div>
                 <div class="col-5">
-                    {% include language_options.html %}
+                    <div class="desktop">
+                        {% include language_options.html %}
+                    </div>
                 </div>
             </div>
             <div class="row">
                 <div class="post-info-container">
                     {% include post_metadata.html %}
                 </div>
-                <div style="flex:33%" />
+                <div style="flex:33%"></div>
             </div>
         </header>
         <div itemprop="articleBody" class="post-content-container">
@@ -45,11 +47,11 @@ comments: true
                 {% include latest_posts.html %}
             </div>
         </div>
-        <div class="post-post-section-mobile">
-            {% include latest_posts.html %}
-        </div>
     </article>
     {% include author_bio.html %}
+    <div class="post-post-section-mobile">
+        {% include latest_posts.html %}
+    </div>
     {%- if site.disqus.shortname -%}
     {%- include disqus_comments.html -%}
     {%- endif -%}
