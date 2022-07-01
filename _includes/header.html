@@ -11,18 +11,26 @@
             <div id="header-links" class="mobile-nav">
                 <div class="nav navbar-nav">
                     <div class="nav-link"><a href="https://kouncil.io/#kouncil">Home</a></div>
-                    <div class="nav-link hide-on-mobile"><a href="https://kouncil.io/#features" class="active">Features</a></div>
+                    <div class="dropdown nav-link">
+                        <a href="https://kouncil.io/#features" class="active">
+                            Features <i class="fa-solid fa-angle-down"></i>
+                        </a>
+                        {% include header-dropdown-desktop.html %}
+                    </div>
                     <div class="nav-link"><a href="https://kouncil.io/#enterprise-edition">Blog</a></div>
                     <div class="nav-link"><a href="https://docs.kouncil.io/">Documentation</a></div>
                     <div class="nav-link"><a href="https://kouncil-demo.web.app/">Demo</a></div>
                 </div>
             </div>
-            <div class="header-contact-button-container">
+            <div class="header-contact-button-container desktop">
                 <a href="https://kouncil.io/#contact" target="_blank">
                     <div class="primary-button-small">
                         Contact us
                     </div>
                 </a>
+            </div>
+            <div class="mobile header-bars">
+                <i class="fa-solid fa-bars"></i>
             </div>
         </div>
     </div>

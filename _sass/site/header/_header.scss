@@ -3,6 +3,7 @@ nav {
   @import "header-links";
   @import "header-brand";
   @import "header-feed-subscribe";
+  @import "header-dropdown";
 
   div {
     line-height: 1;
@@ -52,6 +53,13 @@ nav {
 
   .mobile-search {
     display: none;
+  }
+
+  .dropdown {
+    overflow: hidden;
+    &:hover .header-dropdown {
+      display: block;
+    }
   }
 
 }

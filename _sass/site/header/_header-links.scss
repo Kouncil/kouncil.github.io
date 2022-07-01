@@ -75,11 +75,9 @@
       color: black;
     }
 
-    .hide-on-mobile {
-      display: none;
-      @include desktop {
-        @include flex-container;
-      }
+    .fa-angle-down {
+      font-size: 15px;
+      margin-left: 12px;
     }
   }
 }
@@ -87,7 +85,4 @@
 .header-contact-button-container {
   @include flex-container;
   align-items: center;
-  @include mobile {
-    display: none;
-  }
 }
