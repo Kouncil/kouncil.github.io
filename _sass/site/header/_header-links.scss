@@ -11,28 +11,23 @@
   @include mobile {
     &.mobile-nav {
       @include flex-container;
-      position: absolute;
-      height: 0;
+      display: none;
+      position: fixed;
+      top: $navbar-height-mobile + 1;
+      left: 0;
       transition: height 1s;
-      overflow: hidden;
-      background-color: $color-russian-black;
-      margin-left: -$content-padding;
-      border-top: 1px solid $color-medium-gray;
-      padding-left: $content-padding;
-      padding-right: $content-padding;
-    }
-
-    &.show {
-      height: $mobile-link-height * 5;
+      background-color: $color-white;
+      height: 100%;
+      padding: 40px 20px;
     }
   }
 
   .nav {
     @include flex-container;
     flex-direction: column;
+    width: 100%;
     @include tablet-and-desktop {
       flex-direction: row;
-      width: 100%;
       height: 100%;
     }
   }
@@ -79,6 +74,17 @@
       font-size: 15px;
       margin-left: 12px;
     }
+
+    @include mobile {
+      @include flex-container;
+      padding: 32px 0;
+      border-bottom: $header-separator;
+      width: 100%;
+    }
+  }
+
+  &.show {
+    display: flex;
   }
 }
 

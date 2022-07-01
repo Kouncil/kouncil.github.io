@@ -29,9 +29,18 @@
                     </div>
                 </a>
             </div>
-            <div class="mobile header-bars">
-                <i class="fa-solid fa-bars"></i>
+            <div class="mobile" id="mobile-nav-toggle">
+                <i class="fa-solid fa-bars" id="header-bars"></i>
+                <i class="fa-solid fa-xmark hidden" id="header-x"></i>
             </div>
         </div>
     </div>
 </nav>
+
+<script>
+    document.getElementById("mobile-nav-toggle").addEventListener('click', () => {
+        document.getElementById("header-links").classList.toggle("show");
+        document.getElementById("header-bars").classList.toggle("hidden");
+        document.getElementById("header-x").classList.toggle("hidden");
+    });
+</script>

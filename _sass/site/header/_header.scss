@@ -45,16 +45,6 @@ nav {
     }
   }
 
-  .logo-invisible {
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0s linear 300ms, opacity 300ms;
-  }
-
-  .mobile-search {
-    display: none;
-  }
-
   .dropdown {
     overflow: hidden;
     &:hover .header-dropdown {
@@ -62,4 +52,11 @@ nav {
     }
   }
 
+  .fa-bars, .fa-xmark {
+    font-size: 24px;
+  }
+
+  .hidden {
+    display: none;
+  }
 }

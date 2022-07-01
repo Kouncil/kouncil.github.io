@@ -6,7 +6,7 @@
   background-color: white;
   top: $navbar-height-desktop + 1;
   left: 0;
-  border-bottom: 1px solid rgba(112, 63, 216, 0.2);
+  border-bottom: $header-separator;
 }
 
 .header-dropdown-content {
@@ -20,7 +20,7 @@
   flex: 1 0 auto;
   flex-direction: column;
   padding-right: 80px;
-  border-right: 1px solid rgba(112, 63, 216, 0.2);
+  border-right: $header-separator;
   &:not(:first-of-type) {
     padding-left: 80px;
   }
