@@ -1,0 +1,38 @@
+<div id="header-links-features" class="mobile-nav">
+    <div class="nav navbar-nav">
+        <span class="header-back-link" id="header-back-link">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Back to menu</span>
+        </span>
+        <div class="nav-link">
+            <a>
+                <div class="header-dropdown-icon-container">
+                    <img src="/assets/img/data.svg" alt="database"/>
+                </div>
+                Apache Kafka Monitoring
+                </a>
+        </div>
+        <div class="nav-link">
+            <a>
+                <div class="header-dropdown-icon-container">
+                    <img src="/assets/img/monitoring.svg" alt="database" />
+                </div>
+                Protect Data
+            </a>
+        </div>
+        <div class="nav-link">
+            <a>
+                <div class="header-dropdown-icon-container">
+                    <img src="/assets/img/shield.svg" alt="database" />
+                </div>
+                <span>Explore Data</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("header-back-link").addEventListener('click', () => {
+        document.getElementById("header-links-features").classList.toggle("show");
+    })
+</script>
