@@ -56,10 +56,6 @@ footer {
     justify-content: space-between;
     padding: 64px 20px 0;
 
-    @include mobile {
-      background-color: white;
-    }
-
     @include tablet-and-desktop {
       flex-direction: row;
       padding: 120px 100px;

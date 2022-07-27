@@ -13,6 +13,19 @@
   @include flex-container;
   @include content-container;
   padding: 64px 100px;
+
+  a {
+    display: block;
+    &:not(:first-of-type) {
+      padding-left: 80px;
+    }
+
+    &:hover {
+      span, .header-section-text, .header-section-title {
+        color: $color-primary;
+      }
+    }
+  }
 }
 
 .header-dropdown-section {
@@ -21,9 +34,6 @@
   flex-direction: column;
   padding-right: 80px;
   border-right: $header-separator;
-  &:not(:first-of-type) {
-    padding-left: 80px;
-  }
 }
 
 .header-dropdown-icon-container {

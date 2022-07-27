@@ -73,6 +73,7 @@
       color: black;
       display: flex;
       align-items: center;
+      font-weight: 400;
     }
 
     .fa-angle-down {
@@ -85,6 +86,12 @@
       padding: 32px 5px 32px 0;
       border-bottom: $header-separator;
       width: 100%;
+
+      span {
+        display: inline-block;
+        margin-left: 20px;
+        font-weight: $font-weight-semibold;
+      }
     }
   }
 

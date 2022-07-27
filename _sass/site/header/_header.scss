@@ -33,6 +33,10 @@ nav {
     }
     justify-content: space-between;
     width: 100%;
+
+    @include tablet {
+      padding: 0 20px;
+    }
   }
 
   .container {

@@ -40,11 +40,22 @@
   justify-content: space-between;
 
   @include tablet-and-desktop {
-    width: 610px;
     padding: $content-padding;
     *:not(.small-author-image) {
       margin: 0;
     }
+
+    .post-description {
+      margin-bottom: 20px;
+    }
+  }
+
+  @include desktop {
+    width: 610px;
+  }
+
+  @include tablet {
+    width: unset;
   }
 
   @include mobile {
@@ -59,6 +70,8 @@
   }
 
   .tile-author {
+    margin-bottom: 64px;
+
     @include mobile {
       margin-bottom: 20px;
     }

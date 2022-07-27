@@ -11,6 +11,10 @@
   @include mobile {
     padding: 0 20px;
   }
+
+  &.back-link-row {
+    justify-content: space-between;
+  }
 }
 
 .first-row {

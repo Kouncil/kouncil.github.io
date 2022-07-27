@@ -57,6 +57,10 @@
   background-color: $color-primary;
   color: $color-white;
 
+  &:hover {
+    opacity: .85;
+  }
+
   &:focus {
     background-color: #85B93D;
   }
