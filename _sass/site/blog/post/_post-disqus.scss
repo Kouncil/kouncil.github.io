@@ -1,4 +1,3 @@
 #disqus_thread {
-  display: flex;
-  flex-basis: 100%;
+  @include content-container;
 }
