@@ -2,8 +2,8 @@ recommendedPosts:
   en: "Similar posts"
   pl: "Podobne wpisy"
 newestPosts:
-  en: "Newest posts"
-  pl: "Najnowsze wpisy"
+  en: "More on the blog"
+  pl: "Więcej na blogu"
 announcements:
   en: "Announcements"
   pl: "Ogłoszenia"
@@ -29,17 +29,17 @@ privacyPolicy:
   en: "PRIVACY POLICY"
   pl: "POLITYKA PRYWATNOŚCI"
 allPosts:
-  en: "All posts"
+  en: "All blogposts"
   pl: "Wszystkie wpisy"
 newsletterSignUp:
   en: "Sign up for a tech newsletter"
   pl: "Zapisz się na newsletter techniczny"
 cookieConsent:
-  en: "We would like to use third party cookies and scripts to improve the functionality of this website."
-  pl: "Chcemy używać plików cookie oraz skryptów podmiotów trzecich do polepszania funkcjonowania tej strony"
+  en: "We're using third party cookies and scripts to improve the functionality of this website."
+  pl: "Używamy plików cookie oraz skryptów podmiotów trzecich do polepszania funkcjonowania tej strony"
 cookieConsentApprove:
-  en: "Approve"
-  pl: "Zgadzam się"
+  en: "OK"
+  pl: "OK"
 joinUs:
   en: "Join us"
   pl: "Dołącz do nas"
@@ -58,3 +58,9 @@ noResults:
 title:
   en: "Kouncil - tech blog"
   pl: "Kouncil - blog techniczny"
+newPost:
+  en: "New post"
+  pl: "Nowy wpis"
+readMore:
+  en: "Read more"
+  pl: "Czytaj dalej"

@@ -19,141 +19,45 @@
 }
 
 .sidebar-title {
-  font-weight: bold;
-  font-size: 1.4em;
-  margin-bottom: $small-padding;
+  font-weight: $font-weight-semibold;
+  font-size: 32px;
+  padding-bottom: 40px;
+  margin-bottom: 40px;
   letter-spacing: $general-letter-spacing;
-  border-bottom: $separator-border;
+  border-bottom: 1px solid rgba(97, 63, 195, 0.2);
+
+  @include mobile {
+    font-size: 24px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+  }
 }
 
 .sidebar-post {
-  font-size: 1.2em;
-  letter-spacing: $general-letter-spacing;
+  font-size: 14px;
   margin-bottom: $content-padding;
+
+  .read-more {
+    margin-bottom: 40px;
+  }
+}
+
+.sidebar-post-title {
+  display: block;
+  font-weight: $font-weight-semibold;
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.sidebar-post-content {
+  display: block;
+  margin-bottom: 20px;
 }
 
 .post-post-section-mobile {
-  margin-bottom: $content-padding;
+  padding: 20px;
+  background-color: white;
   @include desktop {
     display: none;
-  }
-}
-
-.ad-container {
-  @include flex-container;
-  padding: $small-padding;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  box-sizing: border-box;
-  border: 1px solid rgba(0, 0, 0, 0.3);
-}
-
-.ad-icons-container {
-  @include flex-container;
-  justify-content: center;
-  align-items: center;
-  max-height: 66px;
-}
-
-.ad-link-icon {
-  &:hover {
-    opacity: 0.85;
-  }
-
-  transition: 0.3s all ease;
-}
-
-.ad-titile {
-  font-size: 24px;
-  font-weight: bold;
-  text-align: center;
-  color: $color-dark-gray;
-  line-height: 1.2em;
-}
-
-.ad-red-text {
-  color: $color-logo-red-dark;
-  font-weight: bold;
-  font-size: 1.1em;
-  text-align: center;
-  margin-bottom: $small-padding;
-}
-
-.ad-event-title {
-  color: $color-dark-gray;
-  font-size: 1.2em;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: $small-padding;
-}
-
-.event-icon {
-  font-size: 3em;
-  margin: $very-small-padding;
-}
-
-.fa-meetup {
-  color: #ed1c40;
-}
-
-.clickable-offer {
-  display: block;
-  margin-bottom: $small-padding;
-}
-
-.job-offer-highlighted {
-  display: flex;
-  flex-direction: column;
-  background-color: $color-logo-red;
-  padding: $very-small-padding;
-
-  &:hover {
-    background-color: $color-logo-red-dark;
-  }
-
-  .job-title {
-    @include job-offer-text(white);
-    font-weight: bold;
-  }
-
-  .job-description {
-    @include job-offer-text(white);
-  }
-
-  .job-salary {
-    @include job-offer-text(white);
-    font-weight: lighter;
-  }
-}
-
-.job-offer, .other-job-offers {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-bottom: $very-small-padding;
-
-  &:hover {
-    .job-salary,
-    .job-description,
-    .job-title {
-      color: $color-logo-red-dark;
-    }
-  }
-
-  .job-salary {
-    @include job-offer-text($color-dark-gray);
-    font-weight: lighter;
-  }
-
-  .job-description {
-    @include job-offer-text($color-dark-gray);
-  }
-
-  .job-title {
-    @include job-offer-text($color-dark-gray);
-    font-weight: bold;
   }
 }

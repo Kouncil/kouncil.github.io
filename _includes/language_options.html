@@ -1,26 +1,11 @@
 {% if page.lang-ref %}
 <div class="post-language-options">
-    <p>{{ site.data.translations['languageOptions'][page.lang]}}</p>
-    <ul>
-        <li>
-            {% if site.active_lang == "pl" %}
-            <a href=" {{ page.url }} " title="Wyświetl po angielsku">
-                <div class="flag en">
-                    <div class="overlay">
-                        <p class="lang-code">EN</p>
-                    </div>
-                </div>
-            </a>
-            {% else %}
-            <a href="/pl{{ page.url }} " title="View in Polish">
-                <div class="flag pl">
-                    <div class="overlay">
-                        <p class="lang-code">PL</p>
-                    </div>
-                </div>
-            </a>
-            {% endif %}
-        </li>
-    </ul>
+    <a href="/pl{{ page.url }} " title="View in Polish" class="{% if site.active_lang == 'pl' %} selected {% endif %}">
+        PL
+    </a>
+    <span class="separator">|</span>
+    <a href=" {{ page.url }} " title="View in English" class="{% if site.active_lang == 'en' %} selected {% endif %}">
+        ENG
+    </a>
 </div>
 {% endif %}

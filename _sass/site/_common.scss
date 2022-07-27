@@ -15,7 +15,7 @@ main {
   width: 100%;
   @include mobile {
     box-sizing: border-box;
-    padding: 0 $small-padding;
+    padding: 0;
   }
 }
 
@@ -38,3 +38,20 @@ main {
   padding-bottom: $content-padding;
   border-bottom: $separator-border;
 }
+
+.mobile {
+  @include tablet-and-desktop {
+    display: none !important;
+  }
+}
+
+.desktop {
+  @include mobile {
+    display: none !important;
+  }
+}
+
+.separator {
+  margin: 0 10px;
+}
+

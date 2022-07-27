@@ -3,14 +3,24 @@ article {
   @import "post-headers";
   @import "post-images";
   @import "post-blockquote";
-  @import "post-author-bio";
-  @import "post-author-bio-mobile";
   @import "post-youtube";
   @import "post-links";
   @import "post-lists";
   @import "post-content";
-  @import "post-sidebar";
   @import "post-share-bar";
   @import "post-disqus";
   @import "post-languages";
+
+  background-color: white;
+
+  @include tablet-and-desktop {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 64px 100px;
+    box-sizing: border-box;
+  }
 }
+
+@import "post-author-bio";
+@import "post-author-bio-mobile";
+@import "post-sidebar";

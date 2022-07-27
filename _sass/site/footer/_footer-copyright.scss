@@ -1,12 +1,106 @@
+.copyright-container {
+  @include content-container;
+  @include flex-container;
+  justify-content: space-between;
+
+  border-top: $small-separator-border;
+
+  @include tablet-and-desktop {
+    padding: 0 100px;
+  }
+
+  @include mobile {
+    padding: 40px 20px;
+  }
+}
+
+.full-width-footer {
+  width: 100%;
+  border-top: $small-separator-border;
+}
+
 .copyright {
   @include flex-container;
-  background-color: $color-blackcurrant;
-  color: $color-stormgray;
+  justify-content: space-between;
   width: 100%;
+  background-color: $background-color;
   height: 80px;
   align-items: center;
-  justify-content: center;
   font-size: 14px;
-  letter-spacing: 2px;
   font-weight: 300;
+
+  span {
+    color: $color-stormgray;
+  }
+
+  @include mobile {
+    flex-direction: column;
+    align-items: flex-start;
+    height: 68px;
+  }
+
+  .copyright-text {
+    @include flex-container;
+    @include mobile {
+      width: 100%;
+    }
+  }
+
+  .copyright-links {
+    @include mobile {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    a {
+      color: $color-stormgray;
+      font-weight: normal;
+      cursor: pointer;
+
+      &:hover {
+        color: $color-primary;
+      }
+    }
+  }
+
+  .social-buttons {
+    @include flex-container;
+
+    @include desktop {
+      margin-right: 2*$small-padding;
+    }
+
+    .social-buttons-container {
+      @include flex-container;
+      flex-direction: row;
+      margin-top: 20px;
+    }
+
+    .social-btn {
+      @include flex-container;
+      align-items: center;
+      justify-content: center;
+
+      color: $color-primary;
+      line-height: 46px;
+      text-align: center;
+      font-size: 24px;
+      margin-right: 10px;
+
+      @include mobile {
+        font-size: 16px;
+      }
+
+      .fa {
+        &.fa-linkedin {
+          margin-left: 2px;
+        }
+
+        &.fa-youtube {
+          margin-left: 2px;
+        }
+      }
+    }
+  }
 }

@@ -1,17 +1,20 @@
 footer {
-  @import "footer-company";
-  @import "footer-social-buttons";
-  @import "footer-legals";
-  @import "footer-copyright";
+  * {
+    font-family: "Inter", Helvetica, Arial, sans-serif;
+  }
 
-  background-color: $color-grape;
+  background-color: $background-color;
+  border-top: 1px solid rgba(97, 63, 195, 0.2);
 
   .footer-item {
     @include flex-container;
     flex-direction: column;
     letter-spacing: 1px;
 
-    width: 100%;
+    @include mobile {
+      margin-bottom: 20px;
+    }
+
     .label {
       @include flex-container;
       color: $color-white;
@@ -25,24 +28,41 @@ footer {
         margin-bottom: 10px;
       }
     }
+
     .item-content {
       color: $color-stormgray;
       font-size: 16px;
       font-weight: 400;
+
+      p {
+        font-weight: $font-weight-light;
+        &:first-of-type {
+          margin-top: 0;
+          color: $color-black;
+          font-weight: $font-weight-regular;
+        }
+      }
+
+      @include mobile {
+        margin-bottom: 45px;
+      }
     }
   }
 
-  .container {
+  .footer-container {
     @include content-container;
     @include flex-container;
     flex-direction: column;
+    justify-content: space-between;
+    padding: 64px 20px 0;
+
     @include tablet-and-desktop {
       flex-direction: row;
+      padding: 120px 100px;
     }
-    justify-content: center;
-    align-items: flex-start;
-
-    padding-top: 30px;
-    padding-bottom: 30px;
   }
+
+  @import "footer-company";
+  @import "footer-copyright";
+  @import "footer-links";
 }

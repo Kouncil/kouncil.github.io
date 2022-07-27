@@ -1,0 +1,13 @@
+.primary-button-big {
+  @include primary-button;
+  width: 177px;
+  height: 52px;
+  border-radius: 10px;
+}
+
+.primary-button-small {
+  @include primary-button;
+  width: 107px;
+  height: 44px;
+  border-radius: 8px;
+}

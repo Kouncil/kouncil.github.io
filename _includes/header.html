@@ -4,37 +4,58 @@
             <div class="header-brand">
                 <div class="nav navbar-nav">
                     <div class="nav-link"><a href="https://kouncil.io/">
-                        <img class="header-logo" src="/assets/img/kouncil-logo.png" alt="Logo" />
+                        <img class="header-logo" src="/assets/img/kouncil-logo.png" alt="Logo"/>
                     </a></div>
-                </div>
-
-                <div class="mobile-search">
-                    {% include search-component-mobile.html %}
                 </div>
             </div>
             <div id="header-links" class="mobile-nav">
-                <div class="feed-subscribe">
-                    <a href="{{ "/feed.xml" | relative_url }}">
-                    <svg class="svg-icon">
-                        <use xlink:href="{{ '/assets/minima-social-icons.svg#rss' | relative_url }}"></use>
-                    </svg>
-                    </a>
+                <div class="nav navbar-nav">
+                    <div class="nav-link"><a href="https://kouncil.io/#kouncil">Home</a></div>
+                    <div class="dropdown nav-link desktop">
+                        <a href="https://kouncil.io/#features" class="active">
+                            Features <i class="fa-solid fa-angle-down"></i>
+                        </a>
+                        {% include header-dropdown-desktop.html %}
+                    </div>
+                    <div class="nav-link mobile" id="mobile-nav-features-toggle">
+                        <a class="active">
+                            Features
+                        </a>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                    <div class="nav-link"><a href="https://kouncil.io/#enterprise-edition">Blog</a></div>
+                    <div class="nav-link"><a href="https://docs.kouncil.io/">Documentation</a></div>
+                    <div class="nav-link"><a href="https://kouncil-demo.web.app/">Demo</a></div>
+                    <div class="primary-button-small mobile">
+                        Contact us
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
                 </div>
-                {% if page.layout != "post" %}
-                    {% if site.active_lang == "pl" %}
-                        <a class="language-switch" onclick="navigate(' {{ page.url }}')">EN</a>
-                    {% else %}
-                        <a class="language-switch" onclick="navigate('/pl{{ page.url }}')">PL</a>
-                    {% endif %}
-                {% endif %}
             </div>
-
+            {% include header-sidebar-mobile.html %}
+            <div class="header-contact-button-container desktop">
+                <a href="https://kouncil.io/#contact" target="_blank">
+                    <div class="primary-button-small">
+                        Contact us
+                    </div>
+                </a>
+            </div>
+            <div class="mobile" id="mobile-nav-toggle">
+                <i class="fa-solid fa-bars" id="header-bars"></i>
+                <i class="fa-solid fa-xmark hidden" id="header-x"></i>
+            </div>
         </div>
     </div>
 </nav>
+
 <script>
-    function navigate(baseUrl) {
-        const queryParams = window.location.search;
-        window.location.href = baseUrl + queryParams;
-    }
+    document.getElementById("mobile-nav-toggle").addEventListener('click', () => {
+        document.getElementById("header-links").classList.toggle("show");
+        document.getElementById("header-bars").classList.toggle("hidden");
+        document.getElementById("header-x").classList.toggle("hidden");
+    });
+
+    document.getElementById("mobile-nav-features-toggle").addEventListener('click', () => {
+        document.getElementById("header-links-features").classList.toggle("show");
+    })
 </script>

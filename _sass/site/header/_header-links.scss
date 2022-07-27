@@ -1,45 +1,125 @@
-#header-links {
-  @include flex-container;
-  align-items: center;
+#header-links, #header-links-features {
+  $mobile-link-height: 40px;
+  position: relative;
+
+  @include desktop {
+    @include flex-container;
+    align-items: center;
+    height: 100%;
+  }
+
+  @include mobile {
+    &.mobile-nav {
+      @include flex-container;
+      display: none;
+      position: fixed;
+      top: $navbar-height-mobile + 1;
+      left: 0;
+      transition: height 1s;
+      background-color: $color-white;
+      height: 100%;
+      width: 100%;
+      padding: 40px 20px;
+      box-sizing: border-box;
+    }
+  }
 
   .nav {
     @include flex-container;
     flex-direction: column;
+    width: 100%;
     @include tablet-and-desktop {
       flex-direction: row;
-      width: 100%;
-      margin-left: $content-padding;
+      height: 100%;
     }
   }
 
   .language-switch {
+    color: black;
     display: inline-block;
-    font-size: 18px;
+    font-size: 17px;
     margin-left: $small-padding;
     cursor: pointer;
     font-weight: bold;
+
+
   }
 
   .nav-link {
     @include flex-container;
-    min-height: 40px;
+    min-height: $mobile-link-height;
+    align-items: center;
+    cursor: pointer;
+    box-sizing: border-box;
+    justify-content: space-between;
     @include tablet-and-desktop {
       min-height: 1px;
-      padding: 6px;
-      @include desktop {
-        padding: 8px;
+      flex-direction: column;
+      flex: 1 0 auto;
+      justify-content: center;
+      border-bottom: 4px solid transparent;
+      margin-right: 40px;
+      &:last-of-type {
+        margin-right: 27px;
+      }
+
+      &:hover {
+        border-color: $color-primary;
       }
     }
-    align-items: center;
 
     a {
-      color: $color-very-dark-gray;
-      text-transform: uppercase;
+      font-size: 17px;
+      color: black;
+      display: flex;
+      align-items: center;
+      font-weight: 400;
+    }
 
-      &.active,
-      &:hover {
-        color: $color-logo-red;
+    .fa-angle-down {
+      font-size: 15px;
+      margin-left: 12px;
+    }
+
+    @include mobile {
+      @include flex-container;
+      padding: 32px 5px 32px 0;
+      border-bottom: $header-separator;
+      width: 100%;
+
+      span {
+        display: inline-block;
+        margin-left: 20px;
+        font-weight: $font-weight-semibold;
       }
     }
   }
+
+  &.show {
+    display: flex;
+  }
+
+  .primary-button-small {
+    box-sizing: border-box;
+    width: 100%;
+    margin-top: 32px;
+    justify-content: space-between;
+    padding: 0 20px;
+  }
+
+  .header-back-link {
+    color: $color-primary;
+    display: inline-block;
+    margin-bottom: 20px;
+    span {
+      font-size: 16px;
+      color: $color-primary;
+      margin-left: 25px;
+    }
+  }
+}
+
+.header-contact-button-container {
+  @include flex-container;
+  align-items: center;
 }

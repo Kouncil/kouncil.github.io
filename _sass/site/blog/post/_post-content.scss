@@ -5,8 +5,9 @@
 
 .post-big-title {
   font-size: $post-title-font-size-desktop;
-  font-weight: bold;
+  font-weight: $font-weight-semibold;
   letter-spacing: $general-letter-spacing;
+  max-width: 820px;
   @include desktop {
     margin-bottom: 0;
     line-height: $post-title-desktop-line-height;
@@ -21,9 +22,7 @@
 .social-media-sharing {
   @include flex-container;
   justify-content: flex-end;
-  border-bottom: $separator-border;
   font-size: 1.2em;
-  font-weight: bold;
 }
 
 .post-content {
@@ -122,6 +121,10 @@
 
 .post-content-container {
   @include flex-container;
+
+  @include mobile {
+    padding: 0 20px;
+  }
 }
 
 .post-content-left-pane {
@@ -130,9 +133,10 @@
 }
 
 .translation-details {
+  border-top: $small-separator-border;
+  padding-top: 40px;
+  font-size: $post-font-size;
   margin: $small-padding 0;
-  text-align: end;
-  font-style: italic;
 }
 
 .highlighted-box {
@@ -144,7 +148,7 @@
 
 .did-you-know-box {
   @extend .highlighted-box;
-  background-color: $color-logo-red;
+  background-color: $color-primary;
 }
 
 .highlighted-box-description {

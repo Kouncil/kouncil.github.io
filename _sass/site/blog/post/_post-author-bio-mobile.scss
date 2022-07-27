@@ -1,16 +1,14 @@
 .author-bio-mobile {
-  display: block;
+  @include flex-container;
   letter-spacing: $general-letter-spacing;
   font-size: 1.2em;
-  border-top: $separator-border;
   @include tablet-and-desktop {
     display: none;
   }
-  padding: $content-padding;
+  padding: 80px 20px;
 
   .header {
-    @include flex-container;
-    align-items: center;
+    height: 100%;
   }
 
   .name-wrapper {
@@ -18,33 +16,28 @@
   }
 
   .author-image {
-    min-width: $big-author-image-size;
-    max-width: $big-author-image-size;
-    min-height: $big-author-image-size;
-    max-height: $big-author-image-size;
+    min-width: $mobile-author-image-size;
+    max-width: $mobile-author-image-size;
+    min-height: $mobile-author-image-size;
+    max-height: $mobile-author-image-size;
     border-radius: 50%;
     overflow: hidden;
 
     img {
-      min-width: $big-author-image-size;
-      max-width: $big-author-image-size;
-      min-height: $big-author-image-size;
-      max-height: $big-author-image-size;
+      min-width: $mobile-author-image-size;
+      max-width: $mobile-author-image-size;
+      min-height: $mobile-author-image-size;
+      max-height: $mobile-author-image-size;
     }
   }
 
   .bio {
-    margin-top: $content-padding;
-    font-size: 1.1em;
+    margin-top: 8px;
+    padding-left: 15px;
+    font-size: 14px;
   }
 
   .author-name {
-    font-size: 1.2em;
-  }
-
-  .social-buttons {
-    svg {
-      padding: 0;
-    }
+    font-size: 14px;
   }
 }

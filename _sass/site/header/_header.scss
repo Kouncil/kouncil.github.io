@@ -3,6 +3,7 @@ nav {
   @import "header-links";
   @import "header-brand";
   @import "header-feed-subscribe";
+  @import "header-dropdown";
 
   div {
     line-height: 1;
@@ -10,11 +11,14 @@ nav {
 
   position: sticky;
   top: 0;
-  width: 100%;
   height: $navbar-height-mobile;
   z-index: $header-z-index;
   background-color: $color-white;
   border-bottom: 1px solid #ccc;
+
+  @include mobile {
+    padding: 0 20px;
+  }
 
   @include tablet-and-desktop {
     height: $navbar-height-desktop;
@@ -29,6 +33,10 @@ nav {
     }
     justify-content: space-between;
     width: 100%;
+
+    @include tablet {
+      padding: 0 20px;
+    }
   }
 
   .container {
@@ -41,14 +49,18 @@ nav {
     }
   }
 
-  .logo-invisible {
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0s linear 300ms, opacity 300ms;
+  .dropdown {
+    overflow: hidden;
+    &:hover .header-dropdown {
+      display: block;
+    }
   }
 
-  .mobile-search {
+  .fa-bars, .fa-xmark {
+    font-size: 24px;
+  }
+
+  .hidden {
     display: none;
   }
-
 }

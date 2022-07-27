@@ -10,9 +10,12 @@
 
 .post-tile {
   @include flex-container;
+  @include round-post-tile;
   flex-direction: column;
   justify-content: space-between;
   margin: $post-tile-margin-top $small-padding $post-tile-margin-bottom;
+  padding: 20px;
+  box-sizing: border-box;
   @include mobile {
     margin: $post-tile-margin-top 0;
   }
@@ -44,22 +47,9 @@
 }
 
 .post-description {
+  font-weight: $font-weight-regular;
   font-size: 1.2em;
   letter-spacing: $general-letter-spacing;
-}
-
-.big-post-tile-content {
-  @include flex-container;
-  flex-direction: column;
-  justify-content: flex-start;
-  padding: $small-padding;
-  @include tablet-and-desktop {
-    padding: $content-padding;
-  }
-
-  .post-title {
-    font-size: 1.6em;
-  }
 }
 
 .small-author-image {
@@ -79,50 +69,9 @@
   font-weight: bold;
 }
 
-.highlight-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
 .small-post-image {
-  min-height: 238px;
-  max-height: 238px;
-}
-
-.post-tile-band {
-  overflow: hidden;
-  position: relative;
-
-  &:before {
-    transform: translateX(-45px) translateY(40px) rotate(-45deg);
-    display: block;
-    content: "Czy wiesz, że?";
-    width: 200px;
-    position: absolute;
-    height: 30px;
-    font-size: 20px;
-    font-weight: bold;
-    text-align: center;
-  }
-}
-
-.post-tile-did-you-know, .big-post-tile-did-you-know {
-  @extend .post-tile-band;
-
-  &:before {
-    content: "Czy wiesz, że?";
-    background-color: $color-logo-red;
-    color: $color-white;
-  }
-}
-
-.post-tile-after-hours, .big-post-tile-after-hours {
-  @extend .post-tile-band;
-
-  &:before {
-    content: "Po godzinach";
-    background-color: $color-highlight-blue;
-    color: $color-white;
-  }
+  width: 100%;
+  height: 252px;
+  object-fit: cover;
+  border-radius: 8px;
 }

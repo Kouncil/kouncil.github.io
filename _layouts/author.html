@@ -1,18 +1,29 @@
 ---
-layout: search
+layout: default
 ---
 
-<article>
-    {% assign author = site.authors | where: 'short_name', page.short_name | first %}
-    <div class="row">
-        <div class="col-15 with-bottom-separator">
+{% assign author = site.authors | where: 'short_name', page.short_name | first %}
+{% assign filtered_posts = site.posts | where: 'lang', site.active_lang | where: 'author', page.short_name %}
+
+<div class="blog">
+    <div class="first-row">
+        {% include main-page-link.html %}
+        <div class="big-post-tile-container">
             {% include author_bio.html %}
         </div>
     </div>
-    {% assign filtered_posts = site.posts | where: 'lang', site.active_lang | where: 'author', page.short_name %}
-    {% for forPost in filtered_posts %}
+    {% assign rows = site.posts.size | divided_by: 3.0 | ceil %}
     <div class="row">
-        {% include big-post-tile.html post=forPost %}
+        {% for forPost in filtered_posts %}
+        {% include small-post-tile.html post=forPost %}
+        {% endfor %}
+
+        {% assign moduloValue = filtered_posts.size | modulo: 3 %}
+        {% if moduloValue > 0 %}
+        {% assign missingPosts = 3 | minus: moduloValue %}
+        {% for i in (1..missingPosts) %}
+        <div class="col-5 padding-column"></div>
+        {% endfor %}
+        {% endif %}
     </div>
-    {% endfor %}
-</article>
+</div>

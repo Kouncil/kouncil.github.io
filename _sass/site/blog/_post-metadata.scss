@@ -1,9 +1,23 @@
+.post-info-container {
+  @include flex-container;
+  flex: 67%;
+  @include mobile {
+    flex: 100%;
+  }
+  justify-content: space-between;
+}
+
+.post-metadata-author {
+  @include flex-container;
+}
+
 .post-metadata {
   $field-margin: 5px;
-
   @include flex-container;
-  color: $color-light-gray;
+  flex: 1 0 auto;
+  justify-content: space-between;
   align-items: center;
+  color: $color-light-gray;
 
   .article-author {
     @include flex-container;
@@ -22,14 +36,14 @@
 
   .author-image {
     margin-left: $field-margin;
-    width: $small-author-image-size;
-    height: $small-author-image-size;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     overflow: hidden;
 
     img {
-      max-width: $small-author-image-size;
-      max-height: $small-author-image-size;
+      max-width: 48px;
+      max-height: 48px;
     }
   }
 

@@ -8,11 +8,11 @@ $mobile-content-width: 100%;
 $tablet-content-width: 100%;
 $tablet-breakpoint: 900px;
 $app-min-width: 320px;
-$navbar-height-mobile: 42px;
+$navbar-height-mobile: 64px;
 $navbar-height-desktop: 65px;
 $header-z-index: 99;
 $narrower-side-margins-desktop: 25%;
-$blog-side-margins-desktop: 25%;
+$blog-side-margins-desktop: 100px;
 $blog-side-margins-tablet: 15%;
 
 // Paddings, margins
@@ -31,21 +31,24 @@ $font-weight-bold: 700;
 $font-weight-semibold: 500;
 $font-weight-regular: 400;
 $font-weight-light: 300;
-$post-title-font-size-desktop: 5em;
+$post-title-font-size-desktop: 48px;
 $post-title-font-size-mobile: 2em;
-$post-font-size: 1.2em;
+$post-font-size: 16px;
 $general-letter-spacing: 1px;
 $default-font-size: 14px;
 $small-font-size: 12px;
-$post-title-desktop-line-height: 80px;
+$post-title-desktop-line-height: 110.5%;
 
 // Specific
 $search-icon-width: 14px;
 $first-post-bottom-margin: 40px;
-$big-author-image-size: 75px;
+$big-author-image-size: 48px;
+$mobile-author-image-size: 64px;
 $medium-author-image-size: 50px;
 $small-author-image-size: 24px;
-$separator-border: 3px solid $color-logo-red;
+$separator-border: 3px solid $color-primary;
+$small-separator-border: 1px solid rgba(97, 63, 195, 0.2);
+$header-separator: 1px solid rgba(112, 63, 216, 0.2);
 $inactive-input-bottom-border: 2px solid $color-dark-gray;
 $post-tile-hover-shadow: rgba(0, 0, 0, 0.22) 0 19px 30px;
 
