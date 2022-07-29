@@ -14,6 +14,7 @@ nav {
   height: $navbar-height-mobile;
   z-index: $header-z-index;
   background-color: $color-white;
+  box-sizing: border-box;
   border-bottom: 1px solid #ccc;
 
   @include mobile {
@@ -21,6 +22,7 @@ nav {
   }
 
   @include tablet-and-desktop {
+    padding: 0 60px;
     height: $navbar-height-desktop;
   }
 
