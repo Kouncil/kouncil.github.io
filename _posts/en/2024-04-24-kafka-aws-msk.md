@@ -1,14 +1,14 @@
 ---
 layout:    post
 title:     "Kouncil connecting to Amazon MSK"
-date:      2024-02-27 7:00:00 +0100
+date:      2024-04-24 7:00:00 +0100
 published: true
 didyouknow: false
 lang: en
 lang-ref:  kafka-aws-msk
 interpreter: Justyna Wiatrzyk-Guzik
 author:    pbelke
-image:     /assets/img/posts/2024-02-27-kafka-aws-msk/kafka-aws-msk.png
+image:     /assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk.png
 description: "Have you ever wonder how to create and connect to an Amazon MSK cluster? In this post we will show you how to do it in two ways."
 tags:
 - kouncil
@@ -18,21 +18,21 @@ tags:
 - aws msk
 ---
 
-There are many ways to run Kafka, ranging from the simplest, such as running it locally, to more complex based on cloud solutions. In this article, we will take a look at one of the cloud solutions - Amazon Managed Streaming for Apache Kafka, or Amazon MSK for short. We will go step by step from creating a Kafka cluster to connecting it to Kouncil.
+There are many ways to run Kafka, ranging from the simplest, such as running it locally, to more complex based on cloud solutions. In this article, we will take a look at one of the cloud solutions - Amazon Managed Streaming for Apache Kafka, or Amazon MSK for short. We will go step by step from creating a Kafka cluster to connecting it to Kouncil. Also, Kouncil will be started in the cloud. In this article we will show the most low-level way, we will start from empty Centos OS, but if you already have AKS or Beanstalk you can run Kouncil as a part of you architecture, as it comes down to running a docker container.
 
 ## Cluster creation
 Creating a Kafka cluster on Amazon MSK is very simple. We need to go to the [Amazon MSK](https://console.aws.amazon.com/msk/home) page and select **Create cluster** to see a cluster configurator. For this article, I will choose **Quick create** and **Provisioned** cluster type. With this configuration, we need to wait several minutes for the cluster to be available.
 
-![Kafka cluster configuration](/assets/img/posts/2024-02-27-kafka-aws-msk/kafka-aws-msk-1.png)
+![Kafka cluster configuration](/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-1.png)
 <span class="img-legend">Kafka cluster configuration</span>
 
-![Created Kafka cluster](/assets/img/posts/2024-02-27-kafka-aws-msk/kafka-aws-msk-2.png)
+![Created Kafka cluster](/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-2.png)
 <span class="img-legend">Created Kafka cluster</span>
 
 ## Creating an IAM role
 To create an IAM policy, we need to go to the [IAM](https://console.aws.amazon.com/iam/home#/home) page and select **Policies** from the side menu, then **Create policy**.
 
-![Adding an authorization rule](/assets/img/posts/2024-02-27-kafka-aws-msk/kafka-aws-msk-3.png)
+![Adding an authorization rule](/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-3.png)
 <span class="img-legend">Adding an authorization rule</span>
 
 As for the editor, I suggest switching to the JSON version. It will make the configuration of policy easier. The following policy enables you to perform all operations on your Kafka cluster. Just remember to change the region, **Account-ID**, and **ClusterName**.
@@ -81,20 +81,20 @@ To run Kouncil in an AWS infrastructure, we will need an Amazon EC2 instance. Cr
 ### Security group configuration
 To make Kouncil accessible from the outside, we need to configure the security group, specifically, allow access to the port on which Kouncil will be run. To do this, select the instance from the list and go to the **Security** tab.
 
-![Security details of our instance](/assets/img/posts/2024-02-27-kafka-aws-msk/kafka-aws-msk-4.png)
+![Security details of our instance](/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-4.png)
 <span class="img-legend">Security details of our instance</span>
 
 Next, go to the security group attached to our instance. In the details of the group, click **Edit inbound rules** to add a new rule.
 Click **Add rule** and select the **HTTP** type for which the default port 80 will be set. Select **Anywhere-IPv4** as the **Source**. With this configuration, Kouncil will be accessible from any IP address. You can restrict access by specifying an IP address or a range of IP addresses.
 
-![Adding the rule enabling connection to Kouncil](/assets/img/posts/2024-02-27-kafka-aws-msk/kafka-aws-msk-5.png)
+![Adding the rule enabling connection to Kouncil](/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-5.png)
 <span class="img-legend">Adding the rule enabling connection to Kouncil</span>
 
 We still need to modify the security group used by our Kafka cluster. To do this, go to the cluster details and then to the attached security group. Click **Edit inbound rules**.
 
 Next, click **Add rule**. Select **Custom TCP**. As a port, set the port on which brokers are available, the default is 9098. In **Source**, choose **Custom** and indicate the security group used by the instance where the Kouncil will be run. Finally, click **Save rules**.
 
-![Adding a rule that allows communication with Kafka brokers](/assets/img/posts/2024-02-27-kafka-aws-msk/kafka-aws-msk-6.png)
+![Adding a rule that allows communication with Kafka brokers](/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-6.png)
 <span class="img-legend">Adding a rule that allows communication with Kafka brokers</span>
 
 ### Running the instance
@@ -103,7 +103,7 @@ To run the instance, return to the list of instances, select it from the list an
 ### Creating the Kouncil configuration
 We need to create a file containing the Kouncil configuration, where we will provide a connection string to the Kafka cluster brokers we created at the beginning. You'll find the connection string for the private endpoint of our Kafka brokers in the details of the cluster by clicking on the **View client information** button.
 
-![Private addresses of Kafka brokers (available within the AWS infrastructure)](/assets/img/posts/2024-02-27-kafka-aws-msk/kafka-aws-msk-7.png)
+![Private addresses of Kafka brokers (available within the AWS infrastructure)](/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-7.png)
 <span class="img-legend">Private addresses of Kafka brokers (available within the AWS infrastructure)</span>
 
 The contents of the Kouncil configuration file should look as follows:
@@ -152,33 +152,33 @@ docker run -m 1G -d -p 80:8080 --restart always -v /home/ec2-user/:/config/ --na
 ```
 Now let's check the public DNS of the instance (**Public IPv4 DNS**).
 
-![Details of instances where you can check the public DNS address](/assets/img/posts/2024-02-27-kafka-aws-msk/kafka-aws-msk-8.png)
+![Details of instances where you can check the public DNS address](/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-8.png)
 <span class="img-legend">Details of instances where you can check the public DNS address</span>
 
 Open it in a new browser window. You should see the Kouncil login page.
 
-![Kouncil login page](/assets/img/posts/2024-02-27-kafka-aws-msk/kafka-aws-msk-9.png)
+![Kouncil login page](/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-9.png)
 <span class="img-legend">Kouncil login page</span>
 
 After logging in as a user with administrator permissions, you will see a list of available Kafka brokers.
 
-![Brokers available on a running Kafka](/assets/img/posts/2024-02-27-kafka-aws-msk/kafka-aws-msk-10.png)
+![Brokers available on a running Kafka](/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-10.png)
 <span class="img-legend">Brokers available on a running Kafka</span>
 
 ## Option 2 - Setting public access to Kafka
 To make the cluster accessible from outside the AWS infrastructure, we need to meet several conditions.
 
-First - disable public access to the cluster. To do this, go to **Networking settings**, expand the options available under **Edit**, and select **Edit public access**. Check **Turn on** and save the changes.
+First - enable public access to the cluster. To do this, go to **Networking settings**, expand the options available under **Edit**, and select **Edit public access**. Check **Turn on** and save the changes.
 
-![Cluster networking settings](/assets/img/posts/2024-02-27-kafka-aws-msk/kafka-aws-msk-11.png)
+![Cluster networking settings](/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-11.png)
 <span class="img-legend">Cluster networking settings</span>
 
-![Enabling public access to the cluster](/assets/img/posts/2024-02-27-kafka-aws-msk/kafka-aws-msk-12.png)
+![Enabling public access to the cluster](/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-12.png)
 <span class="img-legend">Enabling public access to the cluster</span>
 
 Another important thing is to check the configuration of access to the cluster from outside the AWS infrastructure. All subnets used by the cluster must be public, i.e., they must have an Internet gateway with external access defined in the routing table.
 
-![A subnet with an Internet gateway with external access defined in the routing table](/assets/img/posts/2024-02-27-kafka-aws-msk/kafka-aws-msk-13.png)
+![A subnet with an Internet gateway with external access defined in the routing table](/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-13.png)
 <span class="img-legend">A subnet with an Internet gateway with external access defined in the routing table</span>
 
 In addition, the security group used by our cluster must allow **TCP** traffic from the IP address that we will use to connect to Kafka. The security groups that the cluster uses are listed in its networking settings. In the security group details, you can see the rules for inbound and outbound traffic.
@@ -192,7 +192,7 @@ For the **Source**, we can choose from several options:
 * My IP - enables access to the cluster only from the IP address of the machine on which you configure the cluster
 
 
-![Editing the incoming traffic rule for the cluster](/assets/img/posts/2024-02-27-kafka-aws-msk/kafka-aws-msk-14.png)
+![Editing the incoming traffic rule for the cluster](/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-14.png)
 <span class="img-legend">Editing the incoming traffic rule for the cluster</span>
 
 Finally, save the changes by clicking on **Save rules**.
@@ -201,13 +201,13 @@ The last condition is creating a user that we will use for authentication when c
 
 When creating a user, we have several options for connecting the above-defined policy. You can do it using a group defined for users or connect the policy directly to the user. After creating the user, generate an access key. I suggest you save it, as you will need it when connecting to Amazon MSK from Kouncil.
 
-![Created user with generated access key](/assets/img/posts/2024-02-27-kafka-aws-msk/kafka-aws-msk-15.png)
+![Created user with generated access key](/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-15.png)
 <span class="img-legend">Created user with generated access key</span>
 
 ### Connecting to Kouncil
 Connecting to Kouncil comes down to specifying the public address of the broker in the Kafka cluster configuration and the rest of the connection parameters. You can find an example configuration here: [Advanced config - Amazon MSK Kafka cluster](https://docs.kouncil.io/getting-started/deployment#advanced-config-amazon-msk-kafka-cluster).
 
-![Kafka brokers' public addresses](/assets/img/posts/2024-02-27-kafka-aws-msk/kafka-aws-msk-16.png)
+![Kafka brokers' public addresses](/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-16.png)
 <span class="img-legend">Kafka brokers' public addresses</span>
 
 You can use the previously saved access key as environment variables. If you run Kouncil using Docker, you can specify them using the **-e** flag:
@@ -216,7 +216,7 @@ You can use the previously saved access key as environment variables. If you run
 
 After logging into Kouncil, you should see the list of topics created on the given Kafka broker.
 
-![List of brokers from the connected Kafka Amazon MSK](/assets/img/posts/2024-02-27-kafka-aws-msk/kafka-aws-msk-17.png)
+![List of brokers from the connected Kafka Amazon MSK](/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-17.png)
 <span class="img-legend">List of brokers from the connected Kafka Amazon MSK</span>
 
 ## Summary
