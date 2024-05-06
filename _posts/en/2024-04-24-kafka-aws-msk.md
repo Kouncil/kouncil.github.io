@@ -1,6 +1,6 @@
 ---
 layout:    post
-title:     "Kouncil connecting to Amazon MSK"
+title:     "Connecting Kouncil to Amazon MSK"
 date:      2024-04-24 7:00:00 +0100
 published: true
 didyouknow: false
@@ -18,7 +18,7 @@ tags:
 - aws msk
 ---
 
-There are many ways to run Kafka, ranging from the simplest, such as running it locally, to more complex based on cloud solutions. In this article, we will take a look at one of the cloud solutions - Amazon Managed Streaming for Apache Kafka, or Amazon MSK for short. We will go step by step from creating a Kafka cluster to connecting it to Kouncil. Also, Kouncil will be started in the cloud. In this article we will show the most low-level way, we will start from empty Centos OS, but if you already have AKS or Beanstalk you can run Kouncil as a part of you architecture, as it comes down to running a docker container.
+There are many ways to run Kafka, ranging from the simplest, such as running it locally, to more complex based on cloud solutions. In this article, we will take a look at one of the cloud solutions - Amazon Managed Streaming for Apache Kafka, or Amazon MSK for short. We will go step by step from creating a Kafka cluster to connecting it to Kouncil. We will also deploy Kouncil in the cloud. In this article, we'll demonstrate the most fundamental approach, beginning with an empty Centos. However, if you are already using AKS or Beanstalk, you can run Kouncil as a part of your architecture, as it comes down to running a Docker container.
 
 ## Cluster creation
 Creating a Kafka cluster on Amazon MSK is very simple. We need to go to the [Amazon MSK](https://console.aws.amazon.com/msk/home) page and select **Create cluster** to see a cluster configurator. For this article, I will choose **Quick create** and **Provisioned** cluster type. With this configuration, we need to wait several minutes for the cluster to be available.
