@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="/js/lunr.min.js"></script><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Connecting Kouncil to Amazon MSK" />
+<meta name="author" content="pbelke" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="Have you ever wonder how to create and connect to an Amazon MSK cluster? In this post we will show you how to do it in two ways." />
+<meta property="og:description" content="Have you ever wonder how to create and connect to an Amazon MSK cluster? In this post we will show you how to do it in two ways." />
+<link rel="canonical" href="https://blog.kouncil.io/2024/04/24/kafka-aws-msk.html" />
+<meta property="og:url" content="https://blog.kouncil.io/2024/04/24/kafka-aws-msk.html" />
+<meta property="og:site_name" content="Kouncil - blog techniczny" />
+<meta property="og:image" content="https://blog.kouncil.io/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-04-24T01:00:00-05:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="twitter:image" content="https://blog.kouncil.io/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk.png" />
+<meta property="twitter:title" content="Connecting Kouncil to Amazon MSK" />
+<script type="application/ld+json">
+{"headline":"Connecting Kouncil to Amazon MSK","dateModified":"2024-04-24T01:00:00-05:00","datePublished":"2024-04-24T01:00:00-05:00","@type":"BlogPosting","description":"Have you ever wonder how to create and connect to an Amazon MSK cluster? In this post we will show you how to do it in two ways.","author":{"@type":"Person","name":"pbelke"},"url":"https://blog.kouncil.io/2024/04/24/kafka-aws-msk.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.kouncil.io/2024/04/24/kafka-aws-msk.html"},"image":"https://blog.kouncil.io/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk.png","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<title>Kouncil - tech blog</title>
+  <script src="https://kit.fontawesome.com/0c5aa818b0.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://blog.kouncil.io/feed.xml" title="Kouncil - blog techniczny" /><script async src="https://www.googletagmanager.com/gtag/js?id=UA-28387432-5"></script>
+<script>
+    window['ga-disable-UA-28387432-5'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-28387432-5');
+</script>
+<script>
+  (function (w, d, s, l, i) {
+    w[l] = w[l] || [];
+    w[l].push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
+    var f = d.getElementsByTagName(s)[0], j = d.createElement(s),
+        dl = l != 'dataLayer' ? '&l=' + l : '';
+    j.async = true;
+    j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+    f.parentNode.insertBefore(j, f);
+  })(window, document, 'script', 'dataLayer', 'GTM-NFV6DPR');
+</script>
+
+    
+    
+    
+  
+
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+</head>
+<body><noscript>
+  <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NFV6DPR" height="0" width="0"
+          style="display:none;visibility:hidden"></iframe>
+</noscript><nav class="site-header">
+    <div class="container">
+        <div class="header navbar-default" role="navigation">
+            <div class="header-brand">
+                <div class="nav navbar-nav">
+                    <div class="nav-link"><a href="https://kouncil.io/">
+                        <img class="header-logo" src="/assets/img/kouncil-logo.png" alt="Logo"/>
+                    </a></div>
+                </div>
+            </div>
+            <div id="header-links" class="mobile-nav">
+                <div class="nav navbar-nav">
+                    <div class="nav-link"><a href="https://kouncil.io/#kouncil">Home</a></div>
+                    <div class="dropdown nav-link desktop">
+                        <a href="https://kouncil.io/#features" class="active">
+                            Features <i class="fa-solid fa-angle-down"></i>
+                        </a>
+                        <div class="header-dropdown desktop">
+    <div class="header-dropdown-content">
+        <a href="https://kouncil.io/explore-data/">
+            <div class="header-dropdown-section">
+                <div class="header-dropdown-icon-container">
+                    <img src="/assets/img/data.svg" alt="database"/>
+                </div>
+                <div class="header-section-title-container">
+                    <span class="header-section-title">Explore Data</span>
+                    <img src="/assets/img/arrow-right.svg" alt="arrow"/>
+                </div>
+                <div class="header-section-text">
+                    View real-time data, receive actionable alerts, and collect granular metrics to detect anomalies
+                </div>
+            </div>
+        </a>
+        <a href="https://kouncil.io/apache-kafka-monitoring/">
+            <div class="header-dropdown-section">
+                <div class="header-dropdown-icon-container">
+                    <img src="/assets/img/monitoring.svg" alt="database"/>
+                </div>
+                <div class="header-section-title-container">
+                    <span class="header-section-title">Apache Kafka Monitoring</span>
+                    <img src="/assets/img/arrow-right.svg" alt="arrow"/>
+                </div>
+                <div class="header-section-text">
+                    View real-time data, receive actionable alerts, and collect granular metrics to detect anomalies
+                </div>
+            </div>
+        </a>
+        <a href="https://kouncil.io/protect-data/">
+            <div class="header-dropdown-section">
+                <div class="header-dropdown-icon-container">
+                    <img src="/assets/img/shield.svg" alt="database"/>
+                </div>
+                <div class="header-section-title-container">
+                    <span class="header-section-title">Protect Data</span>
+                    <img src="/assets/img/arrow-right.svg" alt="arrow"/>
+                </div>
+                <div class="header-section-text">
+                    View real-time data, receive actionable alerts, and collect granular metrics to detect anomalies
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+                    </div>
+                    <div class="nav-link mobile" id="mobile-nav-features-toggle">
+                        <a class="active">
+                            Features
+                        </a>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                    <div class="nav-link"><a href="https://kouncil.io/#enterprise-edition">Blog</a></div>
+                    <div class="nav-link"><a href="https://docs.kouncil.io/">Documentation</a></div>
+                    <div class="nav-link"><a href="https://kouncil-demo.web.app/">Demo</a></div>
+                    <div class="nav-link"><a href="https://github.com/Consdata/kouncil/">Download</a></div>
+                    <div class="nav-link"><a href="https://kouncil.io/pricing/">Pricing</a></div>
+                    <div class="primary-button-small mobile">
+                        Contact us
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+            </div>
+            <div id="header-links-features" class="mobile-nav mobile">
+    <div class="nav navbar-nav">
+        <span class="header-back-link" id="header-back-link">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Back to menu</span>
+        </span>
+        <div class="nav-link">
+            <a href="https://kouncil.io/apache-kafka-monitoring/">
+                <div class="header-dropdown-icon-container">
+                    <img src="/assets/img/data.svg" alt="database"/>
+                </div>
+                <span> Apache Kafka Monitoring </span>
+            </a>
+        </div>
+        <div class="nav-link">
+            <a href="https://kouncil.io/protect-data/">
+                <div class="header-dropdown-icon-container">
+                    <img src="/assets/img/monitoring.svg" alt="database"/>
+                </div>
+                <span>Protect Data</span>
+            </a>
+        </div>
+        <div class="nav-link">
+            <a href="https://kouncil.io/explore-data/">
+                <div class="header-dropdown-icon-container">
+                    <img src="/assets/img/shield.svg" alt="database"/>
+                </div>
+                <span>Explore Data</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("header-back-link").addEventListener('click', () => {
+        document.getElementById("header-links-features").classList.toggle("show");
+    })
+</script>
+
+            <div class="header-contact-button-container desktop">
+                <a href="https://kouncil.io/#contact" target="_blank">
+                    <div class="primary-button-small">
+                        Contact us
+                        <img src="/assets/img/arrow-rightF.png" alt="arrow-right" class="white-arrow"/>
+                    </div>
+                </a>
+            </div>
+            <div class="mobile" id="mobile-nav-toggle">
+                <i class="fa-solid fa-bars" id="header-bars"></i>
+                <i class="fa-solid fa-xmark hidden" id="header-x"></i>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<script>
+    document.getElementById("mobile-nav-toggle").addEventListener('click', () => {
+        document.getElementById("header-links").classList.toggle("show");
+        document.getElementById("header-bars").classList.toggle("hidden");
+        document.getElementById("header-x").classList.toggle("hidden");
+    });
+
+    document.getElementById("mobile-nav-features-toggle").addEventListener('click', () => {
+        document.getElementById("header-links-features").classList.toggle("show");
+    })
+</script>
+<main class="page-content" aria-label="Content">
+    
+
+
+<div class="blog">
+    <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+        <header>
+            <div class="row back-link-row">
+    <div class="main-page-link-container">
+        <a href="/" class="main-page-link">
+            <i class="fa fa-arrow-left"></i>
+            All blogposts
+        </a>
+    </div>
+    <div class="mobile">
+        
+<div class="post-language-options">
+    <a href="/pl/2024/04/24/kafka-aws-msk.html " title="View in Polish" class="">
+        PL
+    </a>
+    <span class="separator">|</span>
+    <a href=" /2024/04/24/kafka-aws-msk.html " title="View in English" class=" selected ">
+        ENG
+    </a>
+</div>
+
+
+    </div>
+</div>
+
+            <div class="row">
+                <div class="col-15">
+                    <h1 class="post-big-title p-name" itemprop="name headline">Connecting Kouncil to Amazon MSK</h1>
+                </div>
+                <div class="col-5">
+                    <div class="desktop">
+                        
+<div class="post-language-options">
+    <a href="/pl/2024/04/24/kafka-aws-msk.html " title="View in Polish" class="">
+        PL
+    </a>
+    <span class="separator">|</span>
+    <a href=" /2024/04/24/kafka-aws-msk.html " title="View in English" class=" selected ">
+        ENG
+    </a>
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="post-info-container">
+                    <div class="post-metadata">
+    <div class="post-metadata-author">
+        <a href="/authors/pbelke.html" class="author-name">
+            <img class="big-author-image" src="/assets/img/authors/pbelke.png" alt="author">
+        </a>
+        <div class="post-info">
+            <a href="/authors/pbelke.html" class="author-name-metadata">Piotr Belke</a>
+            <span>
+24
+
+
+Apr
+
+
+2024
+</span>
+        </div>
+    </div>
+    <div class="social-media-sharing">
+        <div id="share-bar">
+    <div class="share-buttons">
+        <a href="https://www.facebook.com/sharer/sharer.php?u=https://blog.kouncil.io/2024/04/24/kafka-aws-msk.html"
+           onclick="window.open(this.href, 'pop-up', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;"
+           title="Podziel się na Facebooku">
+            <i class="fa-brands fa-facebook-f share-button"></i>
+        </a>
+
+        <a href="https://twitter.com/intent/tweet?text=Connecting Kouncil to Amazon MSK&url=https://blog.kouncil.io/2024/04/24/kafka-aws-msk.html"
+           onclick="window.open(this.href, 'pop-up', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;"
+           title="Podziel się na Twitterze">
+            <i class="fa fa-twitter share-button"> </i>
+        </a>
+
+        <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://blog.kouncil.io/2024/04/24/kafka-aws-msk.html&title=Connecting Kouncil to Amazon MSK&source=Kouncil - blog techniczny"
+           onclick="window.open(this.href, 'pop-up', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;"
+           title="Podziel się na LinkedIn">
+            <i class="fa fa-linkedin share-button"></i>
+        </a>
+
+    </div>
+
+</div>
+
+    </div>
+</div>
+
+                </div>
+                <div style="flex:33%"></div>
+            </div>
+        </header>
+        <div itemprop="articleBody" class="post-content-container">
+            <div class="post-content-left-pane">
+                <div class="post-content">
+                    <div class=" post-highlight-image">
+                        <img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk.png" alt="postimage"/>
+                    </div>
+                    <div id="myModal" class="modal">
+                        <i id="modal-close" class="fa fa-times close" aria-hidden="true"
+                           onclick="closeModal()"></i>
+                        <img class="modal-content">
+                    </div>
+                    <p>There are many ways to run Kafka, ranging from the simplest, such as running it locally, to more complex based on cloud solutions. In this article, we will take a look at one of the cloud solutions - Amazon Managed Streaming for Apache Kafka, or Amazon MSK for short. We will go step by step from creating a Kafka cluster to connecting it to Kouncil. We will also deploy Kouncil in the cloud. In this article, we’ll demonstrate the most fundamental approach, beginning with an empty Centos. However, if you are already using AKS or Beanstalk, you can run Kouncil as a part of your architecture, as it comes down to running a Docker container.</p>
+
+<h2 id="cluster-creation">Cluster creation</h2>
+<p>Creating a Kafka cluster on Amazon MSK is very simple. We need to go to the <a href="https://console.aws.amazon.com/msk/home">Amazon MSK</a> page and select <strong>Create cluster</strong> to see a cluster configurator. For this article, I will choose <strong>Quick create</strong> and <strong>Provisioned</strong> cluster type. With this configuration, we need to wait several minutes for the cluster to be available.</p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-1.png" alt="Kafka cluster configuration" />
+<span class="img-legend">Kafka cluster configuration</span></p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-2.png" alt="Created Kafka cluster" />
+<span class="img-legend">Created Kafka cluster</span></p>
+
+<h2 id="creating-an-iam-role">Creating an IAM role</h2>
+<p>To create an IAM policy, we need to go to the <a href="https://console.aws.amazon.com/iam/home#/home">IAM</a> page and select <strong>Policies</strong> from the side menu, then <strong>Create policy</strong>.</p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-3.png" alt="Adding an authorization rule" />
+<span class="img-legend">Adding an authorization rule</span></p>
+
+<p>As for the editor, I suggest switching to the JSON version. It will make the configuration of policy easier. The following policy enables you to perform all operations on your Kafka cluster. Just remember to change the region, <strong>Account-ID</strong>, and <strong>ClusterName</strong>.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"kafka-cluster:*"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="nl">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"arn:aws:kafka:region:Account-ID:cluster/ClusterName/*"</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"kafka-cluster:*"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="nl">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"arn:aws:kafka:region:Account-ID:topic/ClusterName/*"</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"kafka-cluster:*"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="nl">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"arn:aws:kafka:region:Account-ID:group/ClusterName/*"</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+<p>Next, we need to attach the policy created above to the IAM role. To do this, select <strong>Roles</strong> from the side menu and then <strong>Create roles</strong>. Select <strong>EC2</strong> as the <strong>Use case</strong>, and on the next screen select the policy rule we created earlier. Click <strong>Next</strong>, name the role, and create the role using <strong>Create roles</strong>.</p>
+
+<p>After performing the above configuration, we have two options. The first is to run Kouncil on the AWS infrastructure, connect Kafka Amazon MSK, and set public access to Kouncil. The second option, in our opinion less secure, is to set public access to Kafka.</p>
+
+<h2 id="option-1---running-kouncil-in-aws-infrastructure">Option 1 - running Kouncil in AWS infrastructure</h2>
+<p>To run Kouncil in an AWS infrastructure, we will need an Amazon EC2 instance. Create it <a href="https://console.aws.amazon.com/ec2/">here</a> by clicking on <strong>Launch instance</strong>, and then name it. You can leave the default value for Amazon Machine Image (AMI). Choose <strong>t2.micro</strong> as the instance type. Then, if you don’t have one, create a new login key pair and download it. After expanding <strong>Advanced Details</strong>, select in the <strong>IAM instances profile</strong> the IAM role created earlier. Then, click <strong>Launch instance</strong>.</p>
+
+<h3 id="security-group-configuration">Security group configuration</h3>
+<p>To make Kouncil accessible from the outside, we need to configure the security group, specifically, allow access to the port on which Kouncil will be run. To do this, select the instance from the list and go to the <strong>Security</strong> tab.</p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-4.png" alt="Security details of our instance" />
+<span class="img-legend">Security details of our instance</span></p>
+
+<p>Next, go to the security group attached to our instance. In the details of the group, click <strong>Edit inbound rules</strong> to add a new rule.
+Click <strong>Add rule</strong> and select the <strong>HTTP</strong> type for which the default port 80 will be set. Select <strong>Anywhere-IPv4</strong> as the <strong>Source</strong>. With this configuration, Kouncil will be accessible from any IP address. You can restrict access by specifying an IP address or a range of IP addresses.</p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-5.png" alt="Adding the rule enabling connection to Kouncil" />
+<span class="img-legend">Adding the rule enabling connection to Kouncil</span></p>
+
+<p>We still need to modify the security group used by our Kafka cluster. To do this, go to the cluster details and then to the attached security group. Click <strong>Edit inbound rules</strong>.</p>
+
+<p>Next, click <strong>Add rule</strong>. Select <strong>Custom TCP</strong>. As a port, set the port on which brokers are available, the default is 9098. In <strong>Source</strong>, choose <strong>Custom</strong> and indicate the security group used by the instance where the Kouncil will be run. Finally, click <strong>Save rules</strong>.</p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-6.png" alt="Adding a rule that allows communication with Kafka brokers" />
+<span class="img-legend">Adding a rule that allows communication with Kafka brokers</span></p>
+
+<h3 id="running-the-instance">Running the instance</h3>
+<p>To run the instance, return to the list of instances, select it from the list and click <strong>Connect</strong>. On the next screen, keep the default values and select <strong>Connect</strong>.</p>
+
+<h3 id="creating-the-kouncil-configuration">Creating the Kouncil configuration</h3>
+<p>We need to create a file containing the Kouncil configuration, where we will provide a connection string to the Kafka cluster brokers we created at the beginning. You’ll find the connection string for the private endpoint of our Kafka brokers in the details of the cluster by clicking on the <strong>View client information</strong> button.</p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-7.png" alt="Private addresses of Kafka brokers (available within the AWS infrastructure)" />
+<span class="img-legend">Private addresses of Kafka brokers (available within the AWS infrastructure)</span></p>
+
+<p>The contents of the Kouncil configuration file should look as follows:</p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">kouncil</span><span class="pi">:</span>
+  <span class="na">clusters</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">aws-msk-cluster</span>
+      <span class="na">brokers</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="na">host</span><span class="pi">:</span> <span class="s">b-1.kafkacluster.a4x88r.c25.kafka.us-east-1.amazonaws.com</span>
+          <span class="na">port</span><span class="pi">:</span> <span class="m">9098</span>
+          <span class="na">saslMechanism</span><span class="pi">:</span> <span class="s2">"</span><span class="s">AWS_MSK_IAM"</span>
+          <span class="na">saslProtocol</span><span class="pi">:</span> <span class="s2">"</span><span class="s">SASL_SSL"</span>
+          <span class="na">saslJassConfig</span><span class="pi">:</span> <span class="s">software.amazon.msk.auth.iam.IAMLoginModule required;</span>
+          <span class="na">saslCallbackHandler</span><span class="pi">:</span> <span class="s2">"</span><span class="s">software.amazon.msk.auth.iam.IAMClientCallbackHandler"</span>
+</code></pre></div></div>
+
+<h3 id="launching-kouncil">Launching Kouncil</h3>
+<p>Once you have created the configuration file, you need to install Docker, and you will be able to launch the application.</p>
+
+<p>First, let’s refresh the installed packages and package cache on our instance with the command:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>yum update <span class="nt">-y</span>
+</code></pre></div></div>
+
+<p>To install Docker, run the following command:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>yum <span class="nb">install </span>docker
+</code></pre></div></div>
+
+<p>Once Docker is installed, start the Docker service with the command:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>service docker start
+</code></pre></div></div>
+
+<p>Finally, let’s add a user (in my case ec2-user) to the Docker group, so that we can execute Docker commands without using a <strong>sudo</strong>.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>usermod <span class="nt">-a</span> <span class="nt">-G</span> docker ec2-user.
+</code></pre></div></div>
+
+<p>Next, log out of the instance and log into it again.
+You can check whether the Docker installation is correct with the docker info command, which will list the configuration of the running Docker.</p>
+
+<p>To start Kouncil, run the following command:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run <span class="nt">-m</span> 1G <span class="nt">-d</span> <span class="nt">-p</span> 80:8080 <span class="nt">--restart</span> always <span class="nt">-v</span> /home/ec2-user/:/config/ <span class="nt">--name</span> kouncil consdata/kouncil:latest_snapshot
+</code></pre></div></div>
+<p>Now let’s check the public DNS of the instance (<strong>Public IPv4 DNS</strong>).</p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-8.png" alt="Details of instances where you can check the public DNS address" />
+<span class="img-legend">Details of instances where you can check the public DNS address</span></p>
+
+<p>Open it in a new browser window. You should see the Kouncil login page.</p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-9.png" alt="Kouncil login page" />
+<span class="img-legend">Kouncil login page</span></p>
+
+<p>After logging in as a user with administrator permissions, you will see a list of available Kafka brokers.</p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-10.png" alt="Brokers available on a running Kafka" />
+<span class="img-legend">Brokers available on a running Kafka</span></p>
+
+<h2 id="option-2---setting-public-access-to-kafka">Option 2 - Setting public access to Kafka</h2>
+<p>To make the cluster accessible from outside the AWS infrastructure, we need to meet several conditions.</p>
+
+<p>First - enable public access to the cluster. To do this, go to <strong>Networking settings</strong>, expand the options available under <strong>Edit</strong>, and select <strong>Edit public access</strong>. Check <strong>Turn on</strong> and save the changes.</p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-11.png" alt="Cluster networking settings" />
+<span class="img-legend">Cluster networking settings</span></p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-12.png" alt="Enabling public access to the cluster" />
+<span class="img-legend">Enabling public access to the cluster</span></p>
+
+<p>Another important thing is to check the configuration of access to the cluster from outside the AWS infrastructure. All subnets used by the cluster must be public, i.e., they must have an Internet gateway with external access defined in the routing table.</p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-13.png" alt="A subnet with an Internet gateway with external access defined in the routing table" />
+<span class="img-legend">A subnet with an Internet gateway with external access defined in the routing table</span></p>
+
+<p>In addition, the security group used by our cluster must allow <strong>TCP</strong> traffic from the IP address that we will use to connect to Kafka. The security groups that the cluster uses are listed in its networking settings. In the security group details, you can see the rules for inbound and outbound traffic.</p>
+
+<p>Let’s edit the inbound traffic rule (<strong>Edit inbound rules</strong>). Select <strong>Custom TCP</strong> as the type, and in the <strong>Port range</strong> field, enter the port on which Kafka brokers will be available (9198).</p>
+
+<p>For the <strong>Source</strong>, we can choose from several options:</p>
+<ul>
+  <li>Custom enables defining the exact addresses or address ranges that are to access the cluster</li>
+  <li>Anywhere-IPv4 enables anyone from outside to access the cluster</li>
+  <li>Anywhere-IPv6 enables anyone from outside to access the cluster</li>
+  <li>My IP - enables access to the cluster only from the IP address of the machine on which you configure the cluster</li>
+</ul>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-14.png" alt="Editing the incoming traffic rule for the cluster" />
+<span class="img-legend">Editing the incoming traffic rule for the cluster</span></p>
+
+<p>Finally, save the changes by clicking on <strong>Save rules</strong>.</p>
+
+<p>The last condition is creating a user that we will use for authentication when connecting to Kafka. Go to the main IAM page and select <strong>Users</strong> from the side menu, then <strong>Create user</strong>.</p>
+
+<p>When creating a user, we have several options for connecting the above-defined policy. You can do it using a group defined for users or connect the policy directly to the user. After creating the user, generate an access key. I suggest you save it, as you will need it when connecting to Amazon MSK from Kouncil.</p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-15.png" alt="Created user with generated access key" />
+<span class="img-legend">Created user with generated access key</span></p>
+
+<h3 id="connecting-to-kouncil">Connecting to Kouncil</h3>
+<p>Connecting to Kouncil comes down to specifying the public address of the broker in the Kafka cluster configuration and the rest of the connection parameters. You can find an example configuration here: <a href="https://docs.kouncil.io/getting-started/deployment#advanced-config-amazon-msk-kafka-cluster">Advanced config - Amazon MSK Kafka cluster</a>.</p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-16.png" alt="Kafka brokers' public addresses" />
+<span class="img-legend">Kafka brokers’ public addresses</span></p>
+
+<p>You can use the previously saved access key as environment variables. If you run Kouncil using Docker, you can specify them using the <strong>-e</strong> flag:</p>
+<ul>
+  <li>-e AWS_SECRET_ACCESS_KEY=<secret_access_key></secret_access_key></li>
+  <li>-e AWS_ACCESS_KEY_ID=<access_key_id></access_key_id></li>
+</ul>
+
+<p>After logging into Kouncil, you should see the list of topics created on the given Kafka broker.</p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-17.png" alt="List of brokers from the connected Kafka Amazon MSK" />
+<span class="img-legend">List of brokers from the connected Kafka Amazon MSK</span></p>
+
+<h2 id="summary">Summary</h2>
+<p>In the above post, we explored two ways of connecting Kouncil to a Kafka cluster hosted on Amazon Managed Streaming for Apache Kafka (Amazon MSK).</p>
+
+                    
+                    <span class="translation-details">
+    Translation by Justyna Wiatrzyk-Guzik
+</span>
+
+                    
+                </div>
+            </div>
+            <div class="sidebar">
+                
+<div class="sidebar-container">
+    <div class="sidebar-title">
+        More on the blog
+    </div>
+    <div class="sidebar-latest-posts-container"><div class="sidebar-post">
+            <a href="/2024/11/26/kouncil-1.9.html" lang="en">
+                <span class="sidebar-post-title">
+                    Kouncil 1.9
+                </span>
+                <span class="sidebar-post-content">
+                    With the introduction of database connectivity, Kouncil 1.9 enables further enhancements that were previously impossible. This update allows for managing Kafka clusters, groups, and permissions directly within the application. Moreover, version 1.9 introduces SSO login capabilities through integration with Okta.
+                </span>
+                <a href="/2024/11/26/kouncil-1.9.html">
+    <div class="read-more">
+        <span>Read more</span>
+        <img src="/assets/img/arrow-right.svg" alt="arrow" />
+    </div>
+</a>
+
+            </a>
+        </div><div class="sidebar-post">
+            <a href="/2024/06/13/kouncil-1.8.html" lang="en">
+                <span class="sidebar-post-title">
+                    Kouncil 1.8
+                </span>
+                <span class="sidebar-post-content">
+                    In Kouncil version 1.8, we introduced several key features, such as topic and schema management. We have also expanded support for AVRO type schemas.
+                </span>
+                <a href="/2024/06/13/kouncil-1.8.html">
+    <div class="read-more">
+        <span>Read more</span>
+        <img src="/assets/img/arrow-right.svg" alt="arrow" />
+    </div>
+</a>
+
+            </a>
+        </div><div class="sidebar-post">
+            <a href="/2024/04/24/kafka-aws-msk.html" lang="en">
+                <span class="sidebar-post-title">
+                    Connecting Kouncil to Amazon MSK
+                </span>
+                <span class="sidebar-post-content">
+                    Have you ever wonder how to create and connect to an Amazon MSK cluster? In this post we will show you how to do it in two ways.
+                </span>
+                <a href="/2024/04/24/kafka-aws-msk.html">
+    <div class="read-more">
+        <span>Read more</span>
+        <img src="/assets/img/arrow-right.svg" alt="arrow" />
+    </div>
+</a>
+
+            </a>
+        </div></div>
+</div>
+
+            </div>
+        </div>
+    </article>
+    <div class="author-bio">
+    
+    <div class="author-image">
+        <a href="/authors/pbelke.html" class="author-name">
+            <img src="/assets/img/authors/pbelke.png" alt="author" width="120" height="120">
+        </a>
+    </div>
+    
+    <div class="card">
+        <div class="header">
+            
+            <a href="/authors/pbelke.html" class="author-name">
+                Piotr Belke
+            </a>
+            
+        </div>
+        <div class="content">
+            
+                
+                    <div class="bio">A Fullstack Developer who passionately dedicates himself to both frontend and backend. Outside of work, he thrives in the gym and crafts exquisite dishes in the kitchen, blending flavors much like lines of code. He's also an avid gamer, finding joy in virtual worlds.</div>
+                
+            
+        </div>
+    </div>
+</div>
+<div class="author-bio-mobile">
+    <div class="header">
+        
+        <div class="author-image">
+            <img src="/assets/img/authors/pbelke.png">
+        </div>
+        
+    </div>
+    <div class="content">
+        <div class="name-wrapper">
+            
+            <div class="author-name">Piotr Belke</div>
+            
+        </div>
+        
+            
+                <div class="bio">A Fullstack Developer who passionately dedicates himself to both frontend and backend. Outside of work, he thrives in the gym and crafts exquisite dishes in the kitchen, blending flavors much like lines of code. He's also an avid gamer, finding joy in virtual worlds.</div>
+            
+            
+        
+    </div>
+</div>
+
+    <div class="post-post-section-mobile">
+        
+<div class="sidebar-container">
+    <div class="sidebar-title">
+        More on the blog
+    </div>
+    <div class="sidebar-latest-posts-container"><div class="sidebar-post">
+            <a href="/2024/11/26/kouncil-1.9.html" lang="en">
+                <span class="sidebar-post-title">
+                    Kouncil 1.9
+                </span>
+                <span class="sidebar-post-content">
+                    With the introduction of database connectivity, Kouncil 1.9 enables further enhancements that were previously impossible. This update allows for managing Kafka clusters, groups, and permissions directly within the application. Moreover, version 1.9 introduces SSO login capabilities through integration with Okta.
+                </span>
+                <a href="/2024/11/26/kouncil-1.9.html">
+    <div class="read-more">
+        <span>Read more</span>
+        <img src="/assets/img/arrow-right.svg" alt="arrow" />
+    </div>
+</a>
+
+            </a>
+        </div><div class="sidebar-post">
+            <a href="/2024/06/13/kouncil-1.8.html" lang="en">
+                <span class="sidebar-post-title">
+                    Kouncil 1.8
+                </span>
+                <span class="sidebar-post-content">
+                    In Kouncil version 1.8, we introduced several key features, such as topic and schema management. We have also expanded support for AVRO type schemas.
+                </span>
+                <a href="/2024/06/13/kouncil-1.8.html">
+    <div class="read-more">
+        <span>Read more</span>
+        <img src="/assets/img/arrow-right.svg" alt="arrow" />
+    </div>
+</a>
+
+            </a>
+        </div><div class="sidebar-post">
+            <a href="/2024/04/24/kafka-aws-msk.html" lang="en">
+                <span class="sidebar-post-title">
+                    Connecting Kouncil to Amazon MSK
+                </span>
+                <span class="sidebar-post-content">
+                    Have you ever wonder how to create and connect to an Amazon MSK cluster? In this post we will show you how to do it in two ways.
+                </span>
+                <a href="/2024/04/24/kafka-aws-msk.html">
+    <div class="read-more">
+        <span>Read more</span>
+        <img src="/assets/img/arrow-right.svg" alt="arrow" />
+    </div>
+</a>
+
+            </a>
+        </div></div>
+</div>
+
+    </div><div id="disqus_thread"></div>
+<script>
+    function readCookie(name) {
+        const nameEQ = name + "=";
+        const ca = document.cookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+    if (readCookie('cookie-notice-dismissed') === 'true') {
+        var disqus_config = function () {
+            this.page.url = 'https://blog.kouncil.io/2024/04/24/kafka-aws-msk.html';
+            this.page.identifier = 'https://blog.kouncil.io/2024/04/24/kafka-aws-msk.html';
+        };
+
+        (function () {
+            var d = document, s = d.createElement('script');
+
+            s.src = 'https://kouncil-blog.disqus.com/embed.js';
+
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    }
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments
+    powered by Disqus.</a></noscript></div>
+<script>
+    function zoomImage($event) {
+        const modal = document.getElementById('myModal');
+        modal.getElementsByTagName('img')[0].src = $event.target.src;
+        modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('myModal').style.display = 'none';
+    }
+
+    const postImages = document.querySelectorAll('.post-content img');
+    postImages.forEach(x => x.addEventListener('click', zoomImage));
+</script>
+
+</main><footer>
+    <div class="footer-container">
+        <div class="footer-item company">
+            <div class="label">
+                <a href="https://kouncil.io/" target="_blank" rel="noreferrer">
+                    <img src="/assets/img/kouncil-logo.png"/>
+                </a>
+            </div>
+        </div>
+        <div class="footer-item">
+            <div class="item-content">
+                <p>Contact</p>
+                <p>kouncil@consdata.com</p>
+                <p>+48 61 41 51 000</p>
+            </div>
+        </div>
+        <div class="footer-item">
+            <div class="item-content">
+                <p>Office</p>
+                <p>K9Office, Krysiewicza 9/17</p>
+                <p>61-825 Poznań, Poland</p>
+            </div>
+        </div>
+        <div class="footer-item">
+            <div class="item-content">
+                <p>Features</p>
+                <a href="https://kouncil.io/apache-kafka-monitoring"><p>Apache Kafka Monitoring</p></a>
+                <a href="https://kouncil.io/explore-data"><p>Explore Data</p></a>
+                <a href="https://kouncil.io/protect-data/"><p>Protect data</p></a>
+            </div>
+        </div>
+        <div class="footer-item links">
+            <div class="item-content">
+                <a class="footer-link" href="#"><p>Blog</p></a>
+                <a class="footer-link" href="https://docs.kouncil.io/"><p>Documentation</p></a>
+                <a class="footer-link" href="https://kouncil-demo.web.app/#/topics"><p>Demo</p></a>
+                <a class="footer-link" href="https://kouncil.io/pricing/"><p>Pricing</p></a>
+            </div>
+        </div>
+    </div>
+    <div class="full-width-footer">
+        <div class="copyright-container desktop">
+    <div class="copyright">
+        <div class="copyright-text">
+            <span>Copyright © 2024 Kouncil. All rights reserved.</span>
+            <div class="copyright-links">
+                <span class="separator">|</span>
+                <a href="https://kouncil.io/privacy-policy/">Privacy Policy</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <div class="copyright-container mobile">
+    <div class="copyright">
+        <div class="copyright-text">
+            <div class="copyright-links">
+                <div>
+                    <a>Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+        <span>Copyright © 2024 Kouncil. All rights reserved.</span>
+    </div>
+</div>
+
+    </div>
+</footer>
+<div class="cookie-notice" id="cookie-notice">
+    <span>
+        
+        We're using third party cookies and scripts to improve the functionality of this website.
+    </span>
+    <a id="cookie-notice-accept" class="primary-button-small consent-button">OK</a>
+    <i onclick="hideConsent()" class="close-consent fa fa-times close"></i>
+    <noscript><img height="1" width="1" style="display:none"
+                   src="https://www.facebook.com/tr?id=300808861525851&ev=PageView&noscript=1"
+    /></noscript>
+</div>
+
+<script>
+    function createCookie(name, value, days) {
+        let expires = "";
+        if (days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + value + expires + "; path=/";
+    }
+
+    function readCookie(name) {
+        const nameEQ = name + "=";
+        const ca = document.cookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+    function eraseCookie(name) {
+        createCookie(name, "", -1);
+    }
+
+    function hideConsent() {
+        document.getElementById('cookie-notice').style.display = 'none';
+    }
+
+    if (readCookie('cookie-notice-dismissed') === 'true') {!function (f, b, e, v, n, t, s) {
+    if (f.fbq) return;
+    n = f.fbq = function () {
+        n.callMethod ?
+            n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+    };
+    if (!f._fbq) f._fbq = n;
+    n.push = n;
+    n.loaded = !0;
+    n.version = '2.0';
+    n.queue = [];
+    t = b.createElement(e);
+    t.async = !0;
+    t.src = v;
+    s = b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t, s)
+}(window, document, 'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '300808861525851');
+fbq('track', 'PageView');
+} else {
+        document.getElementById('cookie-notice').style.display = 'flex';
+    }
+
+    document.getElementById('cookie-notice-accept').addEventListener("click", function () {
+        createCookie('cookie-notice-dismissed', 'true', 31);
+        hideConsent();
+        location.reload();
+    });
+</script>
+
+</body>
+</html>

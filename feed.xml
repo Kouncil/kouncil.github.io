@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" >
+  <generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator>
+  <link href="https://blog.kouncil.io/feed.xml" rel="self" type="application/atom+xml" />
+  <link href="https://blog.kouncil.io/" rel="alternate" type="text/html" />
+  <updated>2024-11-26T09:09:07-06:00</updated>
+  <id>https://blog.kouncil.io/feed.xml</id>
+
+  
+  
+  
+
+  
+    <title type="html">Kouncil - blog techniczny | </title>
+  
+
+  
+
+  
+
+  
+  
+  
+    <entry xml:lang="en">
+      <title type="html">Kouncil 1.9</title>
+      <link href="https://blog.kouncil.io/2024/11/26/kouncil-1.9.html" rel="alternate" type="text/html" title="Kouncil 1.9" />
+      <published>2024-11-26T00:00:00-06:00</published>
+      <updated>2024-11-26T00:00:00-06:00</updated>
+      <id>https://blog.kouncil.io/2024/11/26/kouncil-1.9</id>
+
+      
+      
+      
+      
+      
+
+      <author>
+          <name>Piotr Belke</name>
+        
+        
+      </author>
+
+      
+
+      
+        <category term="kouncil" />
+      
+        <category term="kafka" />
+      
+        <category term="database" />
+      
+        <category term="cluster management" />
+      
+        <category term="permissions management" />
+      
+        <category term="okta" />
+      
+
+      
+        <summary type="html">We have added several new features in the latest version of Kouncil 1.9:</summary>
+      
+
+      
+      
+        
+        <media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://blog.kouncil.io/assets/img/posts/2024-11-26-kouncil-1.9/kouncil-1.9.png" />
+      
+    </entry>
+  
+    <entry xml:lang="en">
+      <title type="html">Kouncil 1.8</title>
+      <link href="https://blog.kouncil.io/2024/06/13/kouncil-1.8.html" rel="alternate" type="text/html" title="Kouncil 1.8" />
+      <published>2024-06-13T01:00:00-05:00</published>
+      <updated>2024-06-13T01:00:00-05:00</updated>
+      <id>https://blog.kouncil.io/2024/06/13/kouncil-1.8</id>
+
+      
+      
+      
+      
+      
+
+      <author>
+          <name>Piotr Belke</name>
+        
+        
+      </author>
+
+      
+
+      
+        <category term="kouncil" />
+      
+        <category term="kafka" />
+      
+        <category term="topic management" />
+      
+        <category term="schema management" />
+      
+        <category term="monaco editor" />
+      
+        <category term="avro logical types" />
+      
+
+      
+        <summary type="html">In the latest version of Kouncil 1.8, we have introduced several new features: topic and schema management support for logical types in AVRO schemas ability to configure the context path for Kouncil’s user access replacement of all text editors with the Monaco editor</summary>
+      
+
+      
+      
+        
+        <media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://blog.kouncil.io/assets/img/posts/2024-06-13-kouncil-1.8/kouncil-1.8.png" />
+      
+    </entry>
+  
+    <entry xml:lang="en">
+      <title type="html">Connecting Kouncil to Amazon MSK</title>
+      <link href="https://blog.kouncil.io/2024/04/24/kafka-aws-msk.html" rel="alternate" type="text/html" title="Connecting Kouncil to Amazon MSK" />
+      <published>2024-04-24T01:00:00-05:00</published>
+      <updated>2024-04-24T01:00:00-05:00</updated>
+      <id>https://blog.kouncil.io/2024/04/24/kafka-aws-msk</id>
+
+      
+      
+      
+      
+      
+
+      <author>
+          <name>Piotr Belke</name>
+        
+        
+      </author>
+
+      
+
+      
+        <category term="kouncil" />
+      
+        <category term="programming" />
+      
+        <category term="kafka" />
+      
+        <category term="amazon" />
+      
+        <category term="aws msk" />
+      
+
+      
+        <summary type="html">There are many ways to run Kafka, ranging from the simplest, such as running it locally, to more complex based on cloud solutions. In this article, we will take a look at one of the cloud solutions - Amazon Managed Streaming for Apache Kafka, or Amazon MSK for short. We will go step by step from creating a Kafka cluster to connecting it to Kouncil. We will also deploy Kouncil in the cloud. In this article, we’ll demonstrate the most fundamental approach, beginning with an empty Centos. However, if you are already using AKS or Beanstalk, you can run Kouncil as a part of your architecture, as it comes down to running a Docker container.</summary>
+      
+
+      
+      
+        
+        <media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://blog.kouncil.io/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk.png" />
+      
+    </entry>
+  
+    <entry xml:lang="en">
+      <title type="html">Kouncil - new capabilities</title>
+      <link href="https://blog.kouncil.io/2024/02/20/kouncil-1.7.html" rel="alternate" type="text/html" title="Kouncil - new capabilities" />
+      <published>2024-02-20T00:00:00-06:00</published>
+      <updated>2024-02-20T00:00:00-06:00</updated>
+      <id>https://blog.kouncil.io/2024/02/20/kouncil-1.7</id>
+
+      
+      
+      
+      
+      
+
+      <author>
+          <name>Piotr Belke</name>
+        
+        
+      </author>
+
+      
+
+      
+        <category term="kouncil" />
+      
+        <category term="kafka" />
+      
+        <category term="amazon" />
+      
+        <category term="aws msk" />
+      
+        <category term="schema registry" />
+      
+        <category term="schema registry ssl" />
+      
+
+      
+        <summary type="html">Kouncil 1.7 is compatible with more versions of Kafka than the previous version of the application. Schema Registry, which is connected with the Kafka cluster, has also seen improvements.</summary>
+      
+
+      
+      
+        
+        <media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://blog.kouncil.io/assets/img/posts/2024-02-20-kouncil-1.7/kouncil-1.7.png" />
+      
+    </entry>
+  
+    <entry xml:lang="en">
+      <title type="html">Kouncil - permissions</title>
+      <link href="https://blog.kouncil.io/2023/10/22/kouncil-1.6.html" rel="alternate" type="text/html" title="Kouncil - permissions" />
+      <published>2023-10-22T01:00:00-05:00</published>
+      <updated>2023-10-22T01:00:00-05:00</updated>
+      <id>https://blog.kouncil.io/2023/10/22/kouncil-1.6</id>
+
+      
+      
+      
+      
+      
+
+      <author>
+          <name>Piotr Belke</name>
+        
+        
+      </author>
+
+      
+
+      
+        <category term="kouncil" />
+      
+        <category term="programming" />
+      
+        <category term="kafka" />
+      
+        <category term="authorization" />
+      
+
+      
+        <summary type="html">The most important change in the 1.6 version of Kouncil is the configuration of permissions, which allows precise control of user access to particular functions. In addition, in an effort to continuously improve the application’s interface, we have introduced several minor changes to make the system easier to work with.</summary>
+      
+
+      
+      
+        
+        <media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://blog.kouncil.io/assets/img/posts/2023-10-22-kouncil-1.6/kouncil-1.6.png" />
+      
+    </entry>
+  
+    <entry xml:lang="en">
+      <title type="html">Kouncil is now more secure</title>
+      <link href="https://blog.kouncil.io/2023/10/22/kouncil-1.5.html" rel="alternate" type="text/html" title="Kouncil is now more secure" />
+      <published>2023-10-22T00:00:00-05:00</published>
+      <updated>2023-10-22T00:00:00-05:00</updated>
+      <id>https://blog.kouncil.io/2023/10/22/kouncil-1.5</id>
+
+      
+      
+      
+      
+      
+
+      <author>
+          <name>Piotr Belke</name>
+        
+        
+      </author>
+
+      
+
+      
+        <category term="kouncil" />
+      
+        <category term="programming" />
+      
+        <category term="kafka" />
+      
+        <category term="authentication" />
+      
+        <category term="brokers" />
+      
+
+      
+        <summary type="html">Working on the version 1.5 of Kouncil, we focused on improving the application security and added the possibility of safely connecting with Kafka brokers.</summary>
+      
+
+      
+      
+        
+        <media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://blog.kouncil.io/assets/img/posts/2023-10-22-kouncil-1.5/kouncil-1.5.png" />
+      
+    </entry>
+  
+    <entry xml:lang="en">
+      <title type="html">Reliable event delivery in Apache Kafka based on retry and DLQ</title>
+      <link href="https://blog.kouncil.io/2021/09/13/kafka-retry-dlq.html" rel="alternate" type="text/html" title="Reliable event delivery in Apache Kafka based on retry and DLQ" />
+      <published>2021-09-13T00:00:00-05:00</published>
+      <updated>2021-09-13T00:00:00-05:00</updated>
+      <id>https://blog.kouncil.io/2021/09/13/kafka-retry-dlq</id>
+
+      
+      
+      
+      
+      
+
+      <author>
+          <name>Jacek Grobelny</name>
+        
+        
+      </author>
+
+      
+
+      
+        <category term="kouncil" />
+      
+        <category term="programming" />
+      
+        <category term="kafka" />
+      
+        <category term="event sourcing" />
+      
+        <category term="tool" />
+      
+        <category term="dlq" />
+      
+
+      
+        <summary type="html">Any complex information system may break at some point and this is why you need to have a plan for when something goes wrong while working with one. If you are lucky, the system you have chosen will provide you with ready-made solutions to deal with emergencies but if you are unfortunate enough to have ended up working with Kafka you will have to find other ways to fix problems. In this blog post you will learn why there is no DLQ (Dead Letter Queue) in Kafka and how to handle a situation that calls for such a mechanism.</summary>
+      
+
+      
+      
+        
+        <media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://blog.kouncil.io/assets/img/posts/2021-09-13-kafka-retry-dlq/kafka-retry-dlq4.png" />
+      
+    </entry>
+  
+    <entry xml:lang="en">
+      <title type="html">Event Tracking - finding a needle in a haystack</title>
+      <link href="https://blog.kouncil.io/2021/09/08/kouncil-event-tracking-kafka.html" rel="alternate" type="text/html" title="Event Tracking - finding a needle in a haystack" />
+      <published>2021-09-08T00:00:00-05:00</published>
+      <updated>2021-09-08T00:00:00-05:00</updated>
+      <id>https://blog.kouncil.io/2021/09/08/kouncil-event-tracking-kafka</id>
+
+      
+      
+      
+      
+      
+
+      <author>
+          <name>Marcin Mergo</name>
+        
+        
+      </author>
+
+      
+
+      
+        <category term="kouncil" />
+      
+        <category term="kafka" />
+      
+        <category term="event tracking" />
+      
+
+      
+        <summary type="html">Systems based on Apache Kafka generally use more than one topic, with events that are part of a single process often flowing between them. In some cases the events remain unchanged but the records on consecutive topics can also be modified, e.g. by adding data that is needed at further steps of the process. Event Tracking enables monitoring and visualizing the path of a given event or process by means of Kafka topics.</summary>
+      
+
+      
+      
+        
+        <media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://blog.kouncil.io/assets/img/posts/2021-09-08-kouncil-event-tracking-kafka/route.jpeg" />
+      
+    </entry>
+  
+    <entry xml:lang="en">
+      <title type="html">Kouncil - a modern Kafka frontend</title>
+      <link href="https://blog.kouncil.io/2021/08/30/kouncil-introduction.html" rel="alternate" type="text/html" title="Kouncil - a modern Kafka frontend" />
+      <published>2021-08-30T00:00:00-05:00</published>
+      <updated>2021-08-30T00:00:00-05:00</updated>
+      <id>https://blog.kouncil.io/2021/08/30/kouncil-introduction</id>
+
+      
+      
+      
+      
+      
+
+      <author>
+          <name>Jacek Grobelny</name>
+        
+        
+      </author>
+
+      
+
+      
+        <category term="kouncil" />
+      
+        <category term="programming" />
+      
+        <category term="kafka" />
+      
+        <category term="event sourcing" />
+      
+        <category term="tool" />
+      
+
+      
+        <summary type="html">Less than two years ago I wrote about a tool we created while developing a system based on event sourcing on Kafka. Kafka Companion is gone but this is good news because its place has been taken by Kouncil. The new version of the tool offers all the features its predecessor had, while introducing some new ones. In addition to the eye-catching redesign of the application, there are new features which will be described in detail in upcoming posts on this blog.</summary>
+      
+
+      
+      
+        
+        <media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://blog.kouncil.io/assets/img/posts/2021-08-30-kouncil-introduction/kouncil_dashboard.png" />
+      
+    </entry>
+  
+</feed>

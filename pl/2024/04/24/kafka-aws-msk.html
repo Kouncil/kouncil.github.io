@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="pl">
+<script src="/js/lunr.min.js"></script><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Kouncil podłączenie pod Amazon MSK" />
+<meta name="author" content="pbelke" />
+<meta property="og:locale" content="pl" />
+<meta name="description" content="Czy kiedykolwiek zastanawiałeś się, jak utworzyć i podłączyć się pod klaster Amazon MSK? W tym poście pokażemy Ci jak to zrobić na dwa sposoby." />
+<meta property="og:description" content="Czy kiedykolwiek zastanawiałeś się, jak utworzyć i podłączyć się pod klaster Amazon MSK? W tym poście pokażemy Ci jak to zrobić na dwa sposoby." />
+<link rel="canonical" href="https://blog.kouncil.io/pl/2024/04/24/kafka-aws-msk.html" />
+<meta property="og:url" content="https://blog.kouncil.io/2024/04/24/kafka-aws-msk.html" />
+<meta property="og:site_name" content="Kouncil - blog techniczny" />
+<meta property="og:image" content="https://blog.kouncil.io/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-04-24T01:00:00-05:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="twitter:image" content="https://blog.kouncil.io/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk.png" />
+<meta property="twitter:title" content="Kouncil podłączenie pod Amazon MSK" />
+<script type="application/ld+json">
+{"headline":"Kouncil podłączenie pod Amazon MSK","dateModified":"2024-04-24T01:00:00-05:00","datePublished":"2024-04-24T01:00:00-05:00","@type":"BlogPosting","description":"Czy kiedykolwiek zastanawiałeś się, jak utworzyć i podłączyć się pod klaster Amazon MSK? W tym poście pokażemy Ci jak to zrobić na dwa sposoby.","author":{"@type":"Person","name":"pbelke"},"url":"https://blog.kouncil.io/2024/04/24/kafka-aws-msk.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.kouncil.io/2024/04/24/kafka-aws-msk.html"},"image":"https://blog.kouncil.io/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk.png","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<title>Kouncil - blog techniczny</title>
+  <script src="https://kit.fontawesome.com/0c5aa818b0.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://blog.kouncil.io/pl/feed.xml" title="Kouncil - blog techniczny" /><script async src="https://www.googletagmanager.com/gtag/js?id=UA-28387432-5"></script>
+<script>
+    window['ga-disable-UA-28387432-5'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-28387432-5');
+</script>
+<script>
+  (function (w, d, s, l, i) {
+    w[l] = w[l] || [];
+    w[l].push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
+    var f = d.getElementsByTagName(s)[0], j = d.createElement(s),
+        dl = l != 'dataLayer' ? '&l=' + l : '';
+    j.async = true;
+    j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+    f.parentNode.insertBefore(j, f);
+  })(window, document, 'script', 'dataLayer', 'GTM-NFV6DPR');
+</script>
+
+    
+    
+    
+  
+
+  <link rel="icon" type="image/x-icon" href="/pl/favicon.ico">
+</head>
+<body><noscript>
+  <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NFV6DPR" height="0" width="0"
+          style="display:none;visibility:hidden"></iframe>
+</noscript><nav class="site-header">
+    <div class="container">
+        <div class="header navbar-default" role="navigation">
+            <div class="header-brand">
+                <div class="nav navbar-nav">
+                    <div class="nav-link"><a href="https://kouncil.io/">
+                        <img class="header-logo" src="/assets/img/kouncil-logo.png" alt="Logo"/>
+                    </a></div>
+                </div>
+            </div>
+            <div id="header-links" class="mobile-nav">
+                <div class="nav navbar-nav">
+                    <div class="nav-link"><a href="https://kouncil.io/#kouncil">Home</a></div>
+                    <div class="dropdown nav-link desktop">
+                        <a href="https://kouncil.io/#features" class="active">
+                            Features <i class="fa-solid fa-angle-down"></i>
+                        </a>
+                        <div class="header-dropdown desktop">
+    <div class="header-dropdown-content">
+        <a href="https://kouncil.io/explore-data/">
+            <div class="header-dropdown-section">
+                <div class="header-dropdown-icon-container">
+                    <img src="/assets/img/data.svg" alt="database"/>
+                </div>
+                <div class="header-section-title-container">
+                    <span class="header-section-title">Explore Data</span>
+                    <img src="/assets/img/arrow-right.svg" alt="arrow"/>
+                </div>
+                <div class="header-section-text">
+                    View real-time data, receive actionable alerts, and collect granular metrics to detect anomalies
+                </div>
+            </div>
+        </a>
+        <a href="https://kouncil.io/apache-kafka-monitoring/">
+            <div class="header-dropdown-section">
+                <div class="header-dropdown-icon-container">
+                    <img src="/assets/img/monitoring.svg" alt="database"/>
+                </div>
+                <div class="header-section-title-container">
+                    <span class="header-section-title">Apache Kafka Monitoring</span>
+                    <img src="/assets/img/arrow-right.svg" alt="arrow"/>
+                </div>
+                <div class="header-section-text">
+                    View real-time data, receive actionable alerts, and collect granular metrics to detect anomalies
+                </div>
+            </div>
+        </a>
+        <a href="https://kouncil.io/protect-data/">
+            <div class="header-dropdown-section">
+                <div class="header-dropdown-icon-container">
+                    <img src="/assets/img/shield.svg" alt="database"/>
+                </div>
+                <div class="header-section-title-container">
+                    <span class="header-section-title">Protect Data</span>
+                    <img src="/assets/img/arrow-right.svg" alt="arrow"/>
+                </div>
+                <div class="header-section-text">
+                    View real-time data, receive actionable alerts, and collect granular metrics to detect anomalies
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+                    </div>
+                    <div class="nav-link mobile" id="mobile-nav-features-toggle">
+                        <a class="active">
+                            Features
+                        </a>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                    <div class="nav-link"><a href="https://kouncil.io/#enterprise-edition">Blog</a></div>
+                    <div class="nav-link"><a href="https://docs.kouncil.io/">Documentation</a></div>
+                    <div class="nav-link"><a href="https://kouncil-demo.web.app/">Demo</a></div>
+                    <div class="nav-link"><a href="https://github.com/Consdata/kouncil/">Download</a></div>
+                    <div class="nav-link"><a href="https://kouncil.io/pricing/">Pricing</a></div>
+                    <div class="primary-button-small mobile">
+                        Contact us
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+            </div>
+            <div id="header-links-features" class="mobile-nav mobile">
+    <div class="nav navbar-nav">
+        <span class="header-back-link" id="header-back-link">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Back to menu</span>
+        </span>
+        <div class="nav-link">
+            <a href="https://kouncil.io/apache-kafka-monitoring/">
+                <div class="header-dropdown-icon-container">
+                    <img src="/assets/img/data.svg" alt="database"/>
+                </div>
+                <span> Apache Kafka Monitoring </span>
+            </a>
+        </div>
+        <div class="nav-link">
+            <a href="https://kouncil.io/protect-data/">
+                <div class="header-dropdown-icon-container">
+                    <img src="/assets/img/monitoring.svg" alt="database"/>
+                </div>
+                <span>Protect Data</span>
+            </a>
+        </div>
+        <div class="nav-link">
+            <a href="https://kouncil.io/explore-data/">
+                <div class="header-dropdown-icon-container">
+                    <img src="/assets/img/shield.svg" alt="database"/>
+                </div>
+                <span>Explore Data</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("header-back-link").addEventListener('click', () => {
+        document.getElementById("header-links-features").classList.toggle("show");
+    })
+</script>
+
+            <div class="header-contact-button-container desktop">
+                <a href="https://kouncil.io/#contact" target="_blank">
+                    <div class="primary-button-small">
+                        Contact us
+                        <img src="/assets/img/arrow-rightF.png" alt="arrow-right" class="white-arrow"/>
+                    </div>
+                </a>
+            </div>
+            <div class="mobile" id="mobile-nav-toggle">
+                <i class="fa-solid fa-bars" id="header-bars"></i>
+                <i class="fa-solid fa-xmark hidden" id="header-x"></i>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<script>
+    document.getElementById("mobile-nav-toggle").addEventListener('click', () => {
+        document.getElementById("header-links").classList.toggle("show");
+        document.getElementById("header-bars").classList.toggle("hidden");
+        document.getElementById("header-x").classList.toggle("hidden");
+    });
+
+    document.getElementById("mobile-nav-features-toggle").addEventListener('click', () => {
+        document.getElementById("header-links-features").classList.toggle("show");
+    })
+</script>
+<main class="page-content" aria-label="Content">
+    
+
+
+<div class="blog">
+    <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+        <header>
+            <div class="row back-link-row">
+    <div class="main-page-link-container">
+        <a href="/pl/" class="main-page-link">
+            <i class="fa fa-arrow-left"></i>
+            Wszystkie wpisy
+        </a>
+    </div>
+    <div class="mobile">
+        
+<div class="post-language-options">
+    <a href="/pl/2024/04/24/kafka-aws-msk.html " title="View in Polish" class=" selected ">
+        PL
+    </a>
+    <span class="separator">|</span>
+    <a href=" /2024/04/24/kafka-aws-msk.html " title="View in English" class="">
+        ENG
+    </a>
+</div>
+
+
+    </div>
+</div>
+
+            <div class="row">
+                <div class="col-15">
+                    <h1 class="post-big-title p-name" itemprop="name headline">Kouncil podłączenie pod Amazon MSK</h1>
+                </div>
+                <div class="col-5">
+                    <div class="desktop">
+                        
+<div class="post-language-options">
+    <a href="/pl/2024/04/24/kafka-aws-msk.html " title="View in Polish" class=" selected ">
+        PL
+    </a>
+    <span class="separator">|</span>
+    <a href=" /2024/04/24/kafka-aws-msk.html " title="View in English" class="">
+        ENG
+    </a>
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="post-info-container">
+                    <div class="post-metadata">
+    <div class="post-metadata-author">
+        <a href="/pl/authors/pbelke.html" class="author-name">
+            <img class="big-author-image" src="/assets/img/authors/pbelke.png" alt="author">
+        </a>
+        <div class="post-info">
+            <a href="/pl/authors/pbelke.html" class="author-name-metadata">Piotr Belke</a>
+            <span>
+24
+
+kwietnia
+
+
+
+2024
+</span>
+        </div>
+    </div>
+    <div class="social-media-sharing">
+        <div id="share-bar">
+    <div class="share-buttons">
+        <a href="https://www.facebook.com/sharer/sharer.php?u=https://blog.kouncil.io/2024/04/24/kafka-aws-msk.html"
+           onclick="window.open(this.href, 'pop-up', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;"
+           title="Podziel się na Facebooku">
+            <i class="fa-brands fa-facebook-f share-button"></i>
+        </a>
+
+        <a href="https://twitter.com/intent/tweet?text=Kouncil podłączenie pod Amazon MSK&url=https://blog.kouncil.io/2024/04/24/kafka-aws-msk.html"
+           onclick="window.open(this.href, 'pop-up', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;"
+           title="Podziel się na Twitterze">
+            <i class="fa fa-twitter share-button"> </i>
+        </a>
+
+        <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://blog.kouncil.io/2024/04/24/kafka-aws-msk.html&title=Kouncil podłączenie pod Amazon MSK&source=Kouncil - blog techniczny"
+           onclick="window.open(this.href, 'pop-up', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;"
+           title="Podziel się na LinkedIn">
+            <i class="fa fa-linkedin share-button"></i>
+        </a>
+
+    </div>
+
+</div>
+
+    </div>
+</div>
+
+                </div>
+                <div style="flex:33%"></div>
+            </div>
+        </header>
+        <div itemprop="articleBody" class="post-content-container">
+            <div class="post-content-left-pane">
+                <div class="post-content">
+                    <div class=" post-highlight-image">
+                        <img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk.png" alt="postimage"/>
+                    </div>
+                    <div id="myModal" class="modal">
+                        <i id="modal-close" class="fa fa-times close" aria-hidden="true"
+                           onclick="closeModal()"></i>
+                        <img class="modal-content">
+                    </div>
+                    <p>Sposobów na uruchomienie Kafki jest wiele. Od najprostszych, takich jak uruchomienie lokalne, aż po te oparte o technologie cloudowe. W niniejszym wpisie przyjrzymy się jednemu z rozwiązań chmurowych, jakim jest Amazon Managed Streaming for Apache Kafka, w skrócie Amazon MSK. Przejdziemy krok po kroku od momentu utworzenia klastra Kafki, aż po podpięcie go pod Kouncil. W chmurze uruchomiony zostanie również Kouncil. W tym artykule pokażemy najbardziej niskopoziomy sposób, wystartujemy od pustego Centosa, ale jeśli masz juz AKS albo Beanstalka to możesz uruchomić Kouncil jako element architektury, jako ze sprowadza się to do uruchomienia kontenera dockerowego.</p>
+
+<h2 id="utworzenie-klastra">Utworzenie klastra</h2>
+<p>Utworzenie klastra Kafki na Amazon MSK jest bardzo proste. Musimy przejść do strony <a href="https://console.aws.amazon.com/msk/home">Amazon MSK</a> i dalej wybrać <strong>Create cluster</strong>. Pojawi się konfigurator klastra. Na potrzeby tego artykułu wybiorę opcję <strong>Quick create</strong> oraz typ klastra <strong>Provisioned</strong>. W przypadku takiej konfiguracji trzeba odczekać kilkanaście minut, aby klaster był dostępny.</p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-1.png" alt="Konfiguracja klastra Kafki" />
+<span class="img-legend">Konfiguracja klastra Kafki</span></p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-2.png" alt="Utworzony klaster Kafki" />
+<span class="img-legend">Utworzony klaster Kafki</span></p>
+
+<h2 id="utworzenie-uprawnień---iam">Utworzenie uprawnień - IAM</h2>
+<p>Aby utworzyć regułę uprawnień musimy przejść do strony <a href="https://console.aws.amazon.com/iam/home#/home">IAM</a> i z menu bocznego wybrać <strong>Policies</strong>, a następnie <strong>Create policy</strong>.</p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-3.png" alt="Dodanie reguły uprawnień" />
+<span class="img-legend">Dodanie reguły uprawnień</span></p>
+
+<p>W przypadku edytora proponuję przejść na wersję JSON. Ułatwi to konfigurację uprawnień. Poniższe uprawnienia dają możliwość wykonywania wszystkich operacji na klastrze Kafki. Pamiętaj tylko, żeby zmienić region, <strong>Account-ID</strong> oraz <strong>ClusterName</strong>.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"kafka-cluster:*"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="nl">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"arn:aws:kafka:region:Account-ID:cluster/ClusterName/*"</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"kafka-cluster:*"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="nl">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"arn:aws:kafka:region:Account-ID:topic/ClusterName/*"</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"kafka-cluster:*"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="nl">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"arn:aws:kafka:region:Account-ID:group/ClusterName/*"</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Następnie utworzoną powyżej regułę musimy podpiąć pod rolę IAM. W tym celu z menu bocznego wybieramy <strong>Roles</strong>, a następnie <strong>Create role</strong>. Jako <strong>Use case</strong> wybieramy <strong>EC2</strong> i na kolejnym ekranie wybieramy utworzoną wcześniej regułę uprawnień. Klikamy <strong>Next</strong>, nadajemy naszej roli nazwę i tworzymy rolę za pomocą <strong>Create role</strong>.</p>
+
+<p>Po powyższej konfiguracji mamy dwie możliwości. Pierwsza z nich polega na uruchomieniu Kouncil w infrastrukturze AWS, podpięciu pod niego Kafka Amazon MSK i ustawieniu publicznego dostępu do Kouncil. Druga opcja, naszym zdaniem mniej bezpieczna, to ustawienie publicznego dostępu do Kafki uruchomionej na AWS MSK.</p>
+
+<h2 id="opcja-1---uruchomienie-kouncil-w-infrastrukturze-aws">Opcja 1 - uruchomienie Kouncil w infrastrukturze AWS</h2>
+<p>Aby uruchomić Kouncil w infrastrukturze AWS będziemy potrzebowali instancji Amazon EC2. Możemy ją stworzyć <a href="https://console.aws.amazon.com/ec2/">tutaj</a>, klikając w <strong>Launch instance</strong>. Nadajemy nazwę. Dla Amazon Machine Image (AMI) możemy pozostawić domyślną wartość. Jako typ instancji wybieramy <strong>t2.micro</strong>. Następnie, jeśli nie posiadamy, tworzymy nową parę kluczy logowania i je pobieramy. Po rozwinięciu <strong>Advanced Details</strong> wybieramy w <strong>IAM instances profile</strong> utworzoną wcześniej rolę IAM. Następnie klikamy <strong>Launch instance</strong>.</p>
+
+<h3 id="konfiguracja-grupy-bezpieczeństwa">Konfiguracja grupy bezpieczeństwa</h3>
+<p>Aby Kouncil był dostępny z zewnątrz, musimy skonfigurować grupę bezpieczeństwa, a dokładniej pozwolić na dostęp do portu, na którym Kouncil zostanie uruchomiony. W tym celu wybieramy z listy naszą instancję i przechodzimy do zakładki <strong>Security</strong>.</p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-4.png" alt="Szczegóły bezpieczeństwa naszej instancji" />
+<span class="img-legend">Szczegóły bezpieczeństwa naszej instancji</span></p>
+
+<p>Następnie przechodzimy do grupy bezpieczeństwa podpiętej pod naszą instancję. W szczegółach grupy klikamy <strong>Edit inbound rules</strong>, aby dodać nową regułę.
+Klikamy <strong>Add rule</strong> i wybieramy typ <strong>HTTP</strong>, dla którego zostanie ustawiony domyślny port 80. Jako <strong>Source</strong> wybieramy <strong>Anywhere-IPv4</strong>. Przy takiej konfiguracji, do Kouncil będzie można się dostać z dowolnego adresu IP. Jeśli chcemy, możemy ograniczyć dostęp podając zakres lub konkretny adres IP.</p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-5.png" alt="Dodanie reguły umożliwiającej połączenie się z Kouncil" />
+<span class="img-legend">Dodanie reguły umożliwiającej połączenie się z Kouncil</span></p>
+
+<p>Musimy jeszcze zmodyfikować grupę bezpieczeństwa, z której korzysta nasz klaster Kafki. W tym celu przechodzimy najpierw do szczegółów klastra, a następnie do podpiętej pod niego grupy bezpieczeństwa. Klikamy <strong>Edit inbound rules</strong>.</p>
+
+<p>Dalej klikamy <strong>Add rule</strong>. Tym razem wybieramy opcję <strong>Custom TCP</strong>. Jako port podajemy port, na którym dostępni są brokerzy, domyślnie jest to 9098. W <strong>Source</strong> wybieramy <strong>Custom</strong> i wskazujemy grupę bezpieczeństwa wykorzystywaną przez instancję, na której zostanie uruchomiony Kouncil. Na koniec klikamy <strong>Save rules</strong>.</p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-6.png" alt="Dodanie reguły umożliwiającej komunikację z brokerami Kafki" />
+<span class="img-legend">Dodanie reguły umożliwiającej komunikację z brokerami Kafki</span></p>
+
+<h3 id="uruchomienie-instancji">Uruchomienie instancji</h3>
+<p>Aby uruchomić instancję wracamy do listy instancji, wybieramy ją z listy i klikamy <strong>Connect</strong>. Na następnym ekranie zostawiamy domyślne wartości i wybieramy <strong>Connect</strong>.</p>
+
+<h3 id="utworzenie-konfiguracji-kouncil">Utworzenie konfiguracji Kouncil</h3>
+<p>Musimy utworzyć plik zawierający konfigurację Kouncil, w którym podamy namiary na brokerów klastra Kafki, których uruchomiliśmy na początku. Namiary na brokerów naszej Kafki znajdziemy w szczegółach naszego klastra klikając w przycisk <strong>View client information</strong>.</p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-7.png" alt="Adresy prywatne brokerów Kafki (dostępne w ramach infrastruktury AWS)" />
+<span class="img-legend">Adresy prywatne brokerów Kafki (dostępne w ramach infrastruktury AWS)</span></p>
+
+<p>Zawartość pliku konfiguracyjnego Kouncil powinna wyglądać następująco:</p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">kouncil</span><span class="pi">:</span>
+  <span class="na">clusters</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">aws-msk-cluster</span>
+      <span class="na">brokers</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="na">host</span><span class="pi">:</span> <span class="s">b-1.kafkacluster.a4x88r.c25.kafka.us-east-1.amazonaws.com</span>
+          <span class="na">port</span><span class="pi">:</span> <span class="m">9098</span>
+          <span class="na">saslMechanism</span><span class="pi">:</span> <span class="s2">"</span><span class="s">AWS_MSK_IAM"</span>
+          <span class="na">saslProtocol</span><span class="pi">:</span> <span class="s2">"</span><span class="s">SASL_SSL"</span>
+          <span class="na">saslJassConfig</span><span class="pi">:</span> <span class="s">software.amazon.msk.auth.iam.IAMLoginModule required;</span>
+          <span class="na">saslCallbackHandler</span><span class="pi">:</span> <span class="s2">"</span><span class="s">software.amazon.msk.auth.iam.IAMClientCallbackHandler"</span>
+</code></pre></div></div>
+
+<h3 id="wystartowanie-kouncil">Wystartowanie Kouncil</h3>
+<p>Kiedy już utworzyliśmy plik konfiguracyjny, pozostaje nam tylko zainstalować Dockera i będziemy mogli uruchomić aplikację.</p>
+
+<p>W pierwszej kolejności odświeżmy zainstalowane paczki  i cache paczek na naszej instancji poleceniem:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>yum update <span class="nt">-y</span>
+</code></pre></div></div>
+
+<p>Aby zainstalować Dockera musimy wykonać poniższe polecenie:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>yum <span class="nb">install </span>docker
+</code></pre></div></div>
+
+<p>Kiedy Docker zostanie zainstalowany, uruchamiamy usługę Dockera poleceniem:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>service docker start
+</code></pre></div></div>
+
+<p>Na koniec dodajmy jeszcze naszego użytkownika (w moim przypadku ec2-user) do grupy Dockera, abyśmy mogli wykonywać polecenia Dockera bez używania <strong>sudo</strong>.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>usermod <span class="nt">-a</span> <span class="nt">-G</span> docker ec2-user.
+</code></pre></div></div>
+
+<p>Następnie musimy wylogować się z instancji i zalogować się do niej ponownie.
+Poprawność instalacji Dockera możemy sprawdzić poleceniem docker info, które wylistuje nam konfigurację uruchomionego Dockera.</p>
+
+<p>Aby uruchomić Kouncil musimy wykonać poniższe polecenie:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run <span class="nt">-m</span> 1G <span class="nt">-d</span> <span class="nt">-p</span> 80:8080 <span class="nt">--restart</span> always <span class="nt">-v</span> /home/ec2-user/:/config/ <span class="nt">--name</span> kouncil consdata/kouncil:latest_snapshot
+</code></pre></div></div>
+<p>Teraz pozostaje nam tylko sprawdzić publiczny DNS naszej instancji (<strong>Public IPv4 DNS</strong>).</p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-8.png" alt="Szczegóły instancji, na których możemy sprawdzić publiczny adres DNS" />
+<span class="img-legend">Szczegóły instancji, na których możemy sprawdzić publiczny adres DNS</span></p>
+
+<p>Otwieramy go w nowym oknie przeglądarki. Powinniśmy zobaczyć stronę logowania do Kouncil.</p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-9.png" alt="Strona logowania w aplikacji Kouncil" />
+<span class="img-legend">Strona logowania w aplikacji Kouncil</span></p>
+
+<p>Po zalogowaniu na użytkownika o uprawnieniach administratora zobaczymy listę dostępnych brokerów Kafki.</p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-10.png" alt="Dostępni brokerzy na uruchomionej Kafce" />
+<span class="img-legend">Dostępni brokerzy na uruchomionej Kafce</span></p>
+
+<h2 id="opcja-2---wystawienie-kafki-na-świat">Opcja 2 - Wystawienie Kafki “na świat”</h2>
+<p>Aby nasz klaster był dostępny spoza infrastruktury AWS, musimy spełnić kilka warunków.</p>
+
+<p>Po pierwsze włączamy publiczny dostęp do klastra. W tym celu należy przejść do ustawień sieci (<strong>Networking settings</strong>), rozwinąć opcje dostępne przy <strong>Edit</strong> i wybrać <strong>Edit public access</strong>. Dalej pozostaje tylko zaznaczyć <strong>Turn on</strong> i zapisać zmiany.</p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-11.png" alt="Ustawienia sieci klastra" />
+<span class="img-legend">Ustawienia sieci klastra</span></p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-12.png" alt="Włączenie publicznego dostępu do klastra" />
+<span class="img-legend">Włączenie publicznego dostępu do klastra</span></p>
+
+<p>Kolejną ważną kwestią jest sprawdzenie konfiguracji dostępu do naszego klastra spoza infrastruktury AWS. Wszystkie podsieci, z których korzysta klaster muszą być publiczne, tzn. muszą mieć zdefiniowaną w tablicy routingu bramę internetową z dostępem zewnętrznym.</p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-13.png" alt="Podsieć ze zdefiniowaną w tablicy routingu bramą internetową z dostępem zewnętrznym" />
+<span class="img-legend">Podsieć ze zdefiniowaną w tablicy routingu bramą internetową z dostępem zewnętrznym</span></p>
+
+<p>Ponadto, grupa bezpieczeństwa, z której korzysta nasz klaster musi pozwalać na ruch <strong>TCP</strong> z adresu IP, z którego będziemy chcieli się podłączyć pod Kafkę. Grupy bezpieczeństwa, z których korzysta nasz klaster są wylistowane w jego ustawieniach sieciowych. W szczegółach naszej grupy bezpieczeństwa widzimy reguły, które są używane dla ruchu przychodzącego i wychodzącego.</p>
+
+<p>Zedytujmy regułę ruchu przychodzącego (<strong>Edit inbound rules</strong>). Jako typ wybieramy <strong>Custom TCP</strong>, natomiast w polu <strong>Port range</strong> wpisujemy port, na którym będą dostępni brokerzy Kafki, 9198.</p>
+
+<p>Dla źródła możemy wybierać spośród kilku opcji:</p>
+<ul>
+  <li>Custom pozwala zdefiniować dokładne adresy lub zakresy adresów, które mają mieć dostęp do klastra</li>
+  <li>Anywhere-IPv4 pozwala na dostęp do klastra każdemu z zewnątrz</li>
+  <li>Anywhere-IPv6 pozwala na dostęp do klastra każdemu z zewnątrz</li>
+  <li>My IP - pozwala na dostęp do klastra tylko z adresu IP maszyny, z której konfigurujemy klaster</li>
+</ul>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-14.png" alt="Edycja reguły ruchu przychodzącego do klastra" />
+<span class="img-legend">Edycja reguły ruchu przychodzącego do klastra</span></p>
+
+<p>Na koniec zapisujemy zmiany klikając w <strong>Save rules</strong>.</p>
+
+<p>Ostatnim warunkiem jest utworzenie użytkownika, za pomocą którego będziemy mogli uwierzytelnić się przy połączeniu do Kafki. Przechodzimy na główną stronę IAM i z menu bocznego wybieramy <strong>Users</strong>, a następnie <strong>Create user</strong>.</p>
+
+<p>Przy tworzeniu użytkownika mamy kilka możliwości podpięcia wyżej zdefiniowanych uprawnień. Możemy to zrobić za pomocą grupy zdefiniowanej dla użytkowników, albo podpiąć uprawnienia bezpośrednio pod użytkownika. Po utworzeniu użytkownika należy wygenerować dla niego klucz dostępu. Proponuję go sobie zapisać, ponieważ będziemy go później potrzebować przy podłączeniu się do Amazon MSK z Kouncil.</p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-15.png" alt="Utworzony użytkownik z wygenerowanym kluczem dostępu" />
+<span class="img-legend">Utworzony użytkownik z wygenerowanym kluczem dostępu</span></p>
+
+<h3 id="podpięcie-pod-kouncil">Podpięcie pod Kouncil</h3>
+<p>Samo podpięcie pod Kouncil sprowadza się do podania publicznego adresu brokera w konfiguracji klastra Kafki oraz pozostałych parametrów połączenia. Przykładową konfigurację można znaleźć tutaj <a href="https://docs.kouncil.io/getting-started/deployment#advanced-config-amazon-msk-kafka-cluster">Advanced config - Amazon MSK Kafka cluster</a>.</p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-16.png" alt="Publiczne adresy brokerów Kafki" />
+<span class="img-legend">Publiczne adresy brokerów Kafki</span></p>
+
+<p>Zapisany wcześniej klucz dostępu możemy wykorzystać jako zmienne środowiskowe. W przypadku uruchomienia Kouncil przy użyciu Dockera możemy je podać przy pomocy flagi <strong>-e</strong>:</p>
+<ul>
+  <li>-e AWS_SECRET_ACCESS_KEY=<secret_access_key></secret_access_key></li>
+  <li>-e AWS_ACCESS_KEY_ID=<access_key_id></access_key_id></li>
+</ul>
+
+<p>Po zalogowaniu się do Kouncil powinniśmy zobaczyć listę topiców, którą mamy utworzoną na wybranym brokerze Kafki.</p>
+
+<p><img src="/assets/img/posts/2024-04-24-kafka-aws-msk/kafka-aws-msk-17.png" alt="Lista brokerów z podpiętej Kafki Amazon MSK" />
+<span class="img-legend">Lista brokerów z podpiętej Kafki Amazon MSK</span></p>
+
+<h2 id="podsumowanie">Podsumowanie</h2>
+<p>W powyższym wpisie poznaliśmy dwa sposoby, dzięki którym możemy podpiąć Kouncil pod klaster Kafki postawiony na Amazon Managed Streaming for Apache Kafka (Amazon MSK).</p>
+
+
+                    
+                </div>
+            </div>
+            <div class="sidebar">
+                
+<div class="sidebar-container">
+    <div class="sidebar-title">
+        Więcej na blogu
+    </div>
+    <div class="sidebar-latest-posts-container"><div class="sidebar-post">
+            <a href="/pl/2024/11/26/kouncil-1.9.html" lang="pl">
+                <span class="sidebar-post-title">
+                    Kouncil 1.9
+                </span>
+                <span class="sidebar-post-content">
+                    Dzięki wprowadzeniu połączenia z bazą danych, wersja 1.9 Kouncil umożliwia kolejne usprawnienia, które wcześniej nie były możliwe do zrealizowania. W pierwszej kolejności dodaliśmy możliwość zarządzania klastrami Kafki oraz grupami i uprawnieniami z poziomu aplikacji. Dodatkowo od wersji 1.9 możliwe będzie logowanie SSO dzięki integracji z Okta.
+                </span>
+                <a href="/pl/2024/11/26/kouncil-1.9.html">
+    <div class="read-more">
+        <span>Czytaj dalej</span>
+        <img src="/assets/img/arrow-right.svg" alt="arrow" />
+    </div>
+</a>
+
+            </a>
+        </div><div class="sidebar-post">
+            <a href="/pl/2024/06/13/kouncil-1.8.html" lang="pl">
+                <span class="sidebar-post-title">
+                    Kouncil 1.8
+                </span>
+                <span class="sidebar-post-content">
+                    W wersji 1.8 Kouncil wprowadziliśmy kilka kluczowych funkcjonalności, jak zarządzanie topicami i schemami. Rozbudowana została również obsługa schem typu AVRO.
+                </span>
+                <a href="/pl/2024/06/13/kouncil-1.8.html">
+    <div class="read-more">
+        <span>Czytaj dalej</span>
+        <img src="/assets/img/arrow-right.svg" alt="arrow" />
+    </div>
+</a>
+
+            </a>
+        </div><div class="sidebar-post">
+            <a href="/pl/2024/04/24/kafka-aws-msk.html" lang="pl">
+                <span class="sidebar-post-title">
+                    Kouncil podłączenie pod Amazon MSK
+                </span>
+                <span class="sidebar-post-content">
+                    Czy kiedykolwiek zastanawiałeś się, jak utworzyć i podłączyć się pod klaster Amazon MSK? W tym poście pokażemy Ci jak to zrobić na dwa sposoby.
+                </span>
+                <a href="/pl/2024/04/24/kafka-aws-msk.html">
+    <div class="read-more">
+        <span>Czytaj dalej</span>
+        <img src="/assets/img/arrow-right.svg" alt="arrow" />
+    </div>
+</a>
+
+            </a>
+        </div></div>
+</div>
+
+            </div>
+        </div>
+    </article>
+    <div class="author-bio">
+    
+    <div class="author-image">
+        <a href="/pl/authors/pbelke.html" class="author-name">
+            <img src="/assets/img/authors/pbelke.png" alt="author" width="120" height="120">
+        </a>
+    </div>
+    
+    <div class="card">
+        <div class="header">
+            
+            <a href="/pl/authors/pbelke.html" class="author-name">
+                Piotr Belke
+            </a>
+            
+        </div>
+        <div class="content">
+            
+                
+                    <div class="bio">Fullstack developer, który z pasją poświęca się zarówno frontendowi, jak i backendowi. Poza pracą rozwija się na siłowni, a w kuchni tworzy wyborne potrawy, łącząc smaki jak linie kodu. To także zapalony gracz, czerpiący radość z wirtualnych światów.</div>
+                
+            
+        </div>
+    </div>
+</div>
+<div class="author-bio-mobile">
+    <div class="header">
+        
+        <div class="author-image">
+            <img src="/assets/img/authors/pbelke.png">
+        </div>
+        
+    </div>
+    <div class="content">
+        <div class="name-wrapper">
+            
+            <div class="author-name">Piotr Belke</div>
+            
+        </div>
+        
+            
+            
+                <div class="bio">Fullstack developer, który z pasją poświęca się zarówno frontendowi, jak i backendowi. Poza pracą rozwija się na siłowni, a w kuchni tworzy wyborne potrawy, łącząc smaki jak linie kodu. To także zapalony gracz, czerpiący radość z wirtualnych światów.</div>
+            
+        
+    </div>
+</div>
+
+    <div class="post-post-section-mobile">
+        
+<div class="sidebar-container">
+    <div class="sidebar-title">
+        Więcej na blogu
+    </div>
+    <div class="sidebar-latest-posts-container"><div class="sidebar-post">
+            <a href="/pl/2024/11/26/kouncil-1.9.html" lang="pl">
+                <span class="sidebar-post-title">
+                    Kouncil 1.9
+                </span>
+                <span class="sidebar-post-content">
+                    Dzięki wprowadzeniu połączenia z bazą danych, wersja 1.9 Kouncil umożliwia kolejne usprawnienia, które wcześniej nie były możliwe do zrealizowania. W pierwszej kolejności dodaliśmy możliwość zarządzania klastrami Kafki oraz grupami i uprawnieniami z poziomu aplikacji. Dodatkowo od wersji 1.9 możliwe będzie logowanie SSO dzięki integracji z Okta.
+                </span>
+                <a href="/pl/2024/11/26/kouncil-1.9.html">
+    <div class="read-more">
+        <span>Czytaj dalej</span>
+        <img src="/assets/img/arrow-right.svg" alt="arrow" />
+    </div>
+</a>
+
+            </a>
+        </div><div class="sidebar-post">
+            <a href="/pl/2024/06/13/kouncil-1.8.html" lang="pl">
+                <span class="sidebar-post-title">
+                    Kouncil 1.8
+                </span>
+                <span class="sidebar-post-content">
+                    W wersji 1.8 Kouncil wprowadziliśmy kilka kluczowych funkcjonalności, jak zarządzanie topicami i schemami. Rozbudowana została również obsługa schem typu AVRO.
+                </span>
+                <a href="/pl/2024/06/13/kouncil-1.8.html">
+    <div class="read-more">
+        <span>Czytaj dalej</span>
+        <img src="/assets/img/arrow-right.svg" alt="arrow" />
+    </div>
+</a>
+
+            </a>
+        </div><div class="sidebar-post">
+            <a href="/pl/2024/04/24/kafka-aws-msk.html" lang="pl">
+                <span class="sidebar-post-title">
+                    Kouncil podłączenie pod Amazon MSK
+                </span>
+                <span class="sidebar-post-content">
+                    Czy kiedykolwiek zastanawiałeś się, jak utworzyć i podłączyć się pod klaster Amazon MSK? W tym poście pokażemy Ci jak to zrobić na dwa sposoby.
+                </span>
+                <a href="/pl/2024/04/24/kafka-aws-msk.html">
+    <div class="read-more">
+        <span>Czytaj dalej</span>
+        <img src="/assets/img/arrow-right.svg" alt="arrow" />
+    </div>
+</a>
+
+            </a>
+        </div></div>
+</div>
+
+    </div><div id="disqus_thread"></div>
+<script>
+    function readCookie(name) {
+        const nameEQ = name + "=";
+        const ca = document.cookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+    if (readCookie('cookie-notice-dismissed') === 'true') {
+        var disqus_config = function () {
+            this.page.url = 'https://blog.kouncil.io/2024/04/24/kafka-aws-msk.html';
+            this.page.identifier = 'https://blog.kouncil.io/2024/04/24/kafka-aws-msk.html';
+        };
+
+        (function () {
+            var d = document, s = d.createElement('script');
+
+            s.src = 'https://kouncil-blog.disqus.com/embed.js';
+
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    }
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments
+    powered by Disqus.</a></noscript></div>
+<script>
+    function zoomImage($event) {
+        const modal = document.getElementById('myModal');
+        modal.getElementsByTagName('img')[0].src = $event.target.src;
+        modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('myModal').style.display = 'none';
+    }
+
+    const postImages = document.querySelectorAll('.post-content img');
+    postImages.forEach(x => x.addEventListener('click', zoomImage));
+</script>
+
+</main><footer>
+    <div class="footer-container">
+        <div class="footer-item company">
+            <div class="label">
+                <a href="https://kouncil.io/" target="_blank" rel="noreferrer">
+                    <img src="/assets/img/kouncil-logo.png"/>
+                </a>
+            </div>
+        </div>
+        <div class="footer-item">
+            <div class="item-content">
+                <p>Contact</p>
+                <p>kouncil@consdata.com</p>
+                <p>+48 61 41 51 000</p>
+            </div>
+        </div>
+        <div class="footer-item">
+            <div class="item-content">
+                <p>Office</p>
+                <p>K9Office, Krysiewicza 9/17</p>
+                <p>61-825 Poznań, Poland</p>
+            </div>
+        </div>
+        <div class="footer-item">
+            <div class="item-content">
+                <p>Features</p>
+                <a href="https://kouncil.io/apache-kafka-monitoring"><p>Apache Kafka Monitoring</p></a>
+                <a href="https://kouncil.io/explore-data"><p>Explore Data</p></a>
+                <a href="https://kouncil.io/protect-data/"><p>Protect data</p></a>
+            </div>
+        </div>
+        <div class="footer-item links">
+            <div class="item-content">
+                <a class="footer-link" href="#"><p>Blog</p></a>
+                <a class="footer-link" href="https://docs.kouncil.io/"><p>Documentation</p></a>
+                <a class="footer-link" href="https://kouncil-demo.web.app/#/topics"><p>Demo</p></a>
+                <a class="footer-link" href="https://kouncil.io/pricing/"><p>Pricing</p></a>
+            </div>
+        </div>
+    </div>
+    <div class="full-width-footer">
+        <div class="copyright-container desktop">
+    <div class="copyright">
+        <div class="copyright-text">
+            <span>Copyright © 2024 Kouncil. All rights reserved.</span>
+            <div class="copyright-links">
+                <span class="separator">|</span>
+                <a href="https://kouncil.io/privacy-policy/">Privacy Policy</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <div class="copyright-container mobile">
+    <div class="copyright">
+        <div class="copyright-text">
+            <div class="copyright-links">
+                <div>
+                    <a>Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+        <span>Copyright © 2024 Kouncil. All rights reserved.</span>
+    </div>
+</div>
+
+    </div>
+</footer>
+<div class="cookie-notice" id="cookie-notice">
+    <span>
+        
+        Używamy plików cookie oraz skryptów podmiotów trzecich do polepszania funkcjonowania tej strony
+    </span>
+    <a id="cookie-notice-accept" class="primary-button-small consent-button">OK</a>
+    <i onclick="hideConsent()" class="close-consent fa fa-times close"></i>
+    <noscript><img height="1" width="1" style="display:none"
+                   src="https://www.facebook.com/tr?id=300808861525851&ev=PageView&noscript=1"
+    /></noscript>
+</div>
+
+<script>
+    function createCookie(name, value, days) {
+        let expires = "";
+        if (days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + value + expires + "; path=/";
+    }
+
+    function readCookie(name) {
+        const nameEQ = name + "=";
+        const ca = document.cookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+    function eraseCookie(name) {
+        createCookie(name, "", -1);
+    }
+
+    function hideConsent() {
+        document.getElementById('cookie-notice').style.display = 'none';
+    }
+
+    if (readCookie('cookie-notice-dismissed') === 'true') {!function (f, b, e, v, n, t, s) {
+    if (f.fbq) return;
+    n = f.fbq = function () {
+        n.callMethod ?
+            n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+    };
+    if (!f._fbq) f._fbq = n;
+    n.push = n;
+    n.loaded = !0;
+    n.version = '2.0';
+    n.queue = [];
+    t = b.createElement(e);
+    t.async = !0;
+    t.src = v;
+    s = b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t, s)
+}(window, document, 'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '300808861525851');
+fbq('track', 'PageView');
+} else {
+        document.getElementById('cookie-notice').style.display = 'flex';
+    }
+
+    document.getElementById('cookie-notice-accept').addEventListener("click", function () {
+        createCookie('cookie-notice-dismissed', 'true', 31);
+        hideConsent();
+        location.reload();
+    });
+</script>
+
+</body>
+</html>

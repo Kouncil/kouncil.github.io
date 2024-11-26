@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="pl">
+<script src="/js/lunr.min.js"></script><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Event Tracking, czyli jak znaleźć igłę w stogu siana" />
+<meta name="author" content="mmergo" />
+<meta property="og:locale" content="pl" />
+<meta name="description" content="Event tracking pozwala na prześledzenie oraz wizualizację drogi danego eventu, czy też procesu, przez topiki na Kafce." />
+<meta property="og:description" content="Event tracking pozwala na prześledzenie oraz wizualizację drogi danego eventu, czy też procesu, przez topiki na Kafce." />
+<link rel="canonical" href="https://blog.kouncil.io/pl/2021/09/08/kouncil-event-tracking-kafka.html" />
+<meta property="og:url" content="https://blog.kouncil.io/2021/09/08/kouncil-event-tracking-kafka.html" />
+<meta property="og:site_name" content="Kouncil - blog techniczny" />
+<meta property="og:image" content="https://blog.kouncil.io/assets/img/posts/2021-09-08-kouncil-event-tracking-kafka/route.jpeg" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-09-08T00:00:00-05:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="twitter:image" content="https://blog.kouncil.io/assets/img/posts/2021-09-08-kouncil-event-tracking-kafka/route.jpeg" />
+<meta property="twitter:title" content="Event Tracking, czyli jak znaleźć igłę w stogu siana" />
+<script type="application/ld+json">
+{"headline":"Event Tracking, czyli jak znaleźć igłę w stogu siana","dateModified":"2021-09-08T00:00:00-05:00","datePublished":"2021-09-08T00:00:00-05:00","@type":"BlogPosting","description":"Event tracking pozwala na prześledzenie oraz wizualizację drogi danego eventu, czy też procesu, przez topiki na Kafce.","author":{"@type":"Person","name":"mmergo"},"url":"https://blog.kouncil.io/2021/09/08/kouncil-event-tracking-kafka.html","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.kouncil.io/2021/09/08/kouncil-event-tracking-kafka.html"},"image":"https://blog.kouncil.io/assets/img/posts/2021-09-08-kouncil-event-tracking-kafka/route.jpeg","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<title>Kouncil - blog techniczny</title>
+  <script src="https://kit.fontawesome.com/0c5aa818b0.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://blog.kouncil.io/pl/feed.xml" title="Kouncil - blog techniczny" /><script async src="https://www.googletagmanager.com/gtag/js?id=UA-28387432-5"></script>
+<script>
+    window['ga-disable-UA-28387432-5'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-28387432-5');
+</script>
+<script>
+  (function (w, d, s, l, i) {
+    w[l] = w[l] || [];
+    w[l].push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
+    var f = d.getElementsByTagName(s)[0], j = d.createElement(s),
+        dl = l != 'dataLayer' ? '&l=' + l : '';
+    j.async = true;
+    j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+    f.parentNode.insertBefore(j, f);
+  })(window, document, 'script', 'dataLayer', 'GTM-NFV6DPR');
+</script>
+
+    
+    
+    
+  
+
+  <link rel="icon" type="image/x-icon" href="/pl/favicon.ico">
+</head>
+<body><noscript>
+  <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NFV6DPR" height="0" width="0"
+          style="display:none;visibility:hidden"></iframe>
+</noscript><nav class="site-header">
+    <div class="container">
+        <div class="header navbar-default" role="navigation">
+            <div class="header-brand">
+                <div class="nav navbar-nav">
+                    <div class="nav-link"><a href="https://kouncil.io/">
+                        <img class="header-logo" src="/assets/img/kouncil-logo.png" alt="Logo"/>
+                    </a></div>
+                </div>
+            </div>
+            <div id="header-links" class="mobile-nav">
+                <div class="nav navbar-nav">
+                    <div class="nav-link"><a href="https://kouncil.io/#kouncil">Home</a></div>
+                    <div class="dropdown nav-link desktop">
+                        <a href="https://kouncil.io/#features" class="active">
+                            Features <i class="fa-solid fa-angle-down"></i>
+                        </a>
+                        <div class="header-dropdown desktop">
+    <div class="header-dropdown-content">
+        <a href="https://kouncil.io/explore-data/">
+            <div class="header-dropdown-section">
+                <div class="header-dropdown-icon-container">
+                    <img src="/assets/img/data.svg" alt="database"/>
+                </div>
+                <div class="header-section-title-container">
+                    <span class="header-section-title">Explore Data</span>
+                    <img src="/assets/img/arrow-right.svg" alt="arrow"/>
+                </div>
+                <div class="header-section-text">
+                    View real-time data, receive actionable alerts, and collect granular metrics to detect anomalies
+                </div>
+            </div>
+        </a>
+        <a href="https://kouncil.io/apache-kafka-monitoring/">
+            <div class="header-dropdown-section">
+                <div class="header-dropdown-icon-container">
+                    <img src="/assets/img/monitoring.svg" alt="database"/>
+                </div>
+                <div class="header-section-title-container">
+                    <span class="header-section-title">Apache Kafka Monitoring</span>
+                    <img src="/assets/img/arrow-right.svg" alt="arrow"/>
+                </div>
+                <div class="header-section-text">
+                    View real-time data, receive actionable alerts, and collect granular metrics to detect anomalies
+                </div>
+            </div>
+        </a>
+        <a href="https://kouncil.io/protect-data/">
+            <div class="header-dropdown-section">
+                <div class="header-dropdown-icon-container">
+                    <img src="/assets/img/shield.svg" alt="database"/>
+                </div>
+                <div class="header-section-title-container">
+                    <span class="header-section-title">Protect Data</span>
+                    <img src="/assets/img/arrow-right.svg" alt="arrow"/>
+                </div>
+                <div class="header-section-text">
+                    View real-time data, receive actionable alerts, and collect granular metrics to detect anomalies
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+                    </div>
+                    <div class="nav-link mobile" id="mobile-nav-features-toggle">
+                        <a class="active">
+                            Features
+                        </a>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                    <div class="nav-link"><a href="https://kouncil.io/#enterprise-edition">Blog</a></div>
+                    <div class="nav-link"><a href="https://docs.kouncil.io/">Documentation</a></div>
+                    <div class="nav-link"><a href="https://kouncil-demo.web.app/">Demo</a></div>
+                    <div class="nav-link"><a href="https://github.com/Consdata/kouncil/">Download</a></div>
+                    <div class="nav-link"><a href="https://kouncil.io/pricing/">Pricing</a></div>
+                    <div class="primary-button-small mobile">
+                        Contact us
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+            </div>
+            <div id="header-links-features" class="mobile-nav mobile">
+    <div class="nav navbar-nav">
+        <span class="header-back-link" id="header-back-link">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Back to menu</span>
+        </span>
+        <div class="nav-link">
+            <a href="https://kouncil.io/apache-kafka-monitoring/">
+                <div class="header-dropdown-icon-container">
+                    <img src="/assets/img/data.svg" alt="database"/>
+                </div>
+                <span> Apache Kafka Monitoring </span>
+            </a>
+        </div>
+        <div class="nav-link">
+            <a href="https://kouncil.io/protect-data/">
+                <div class="header-dropdown-icon-container">
+                    <img src="/assets/img/monitoring.svg" alt="database"/>
+                </div>
+                <span>Protect Data</span>
+            </a>
+        </div>
+        <div class="nav-link">
+            <a href="https://kouncil.io/explore-data/">
+                <div class="header-dropdown-icon-container">
+                    <img src="/assets/img/shield.svg" alt="database"/>
+                </div>
+                <span>Explore Data</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("header-back-link").addEventListener('click', () => {
+        document.getElementById("header-links-features").classList.toggle("show");
+    })
+</script>
+
+            <div class="header-contact-button-container desktop">
+                <a href="https://kouncil.io/#contact" target="_blank">
+                    <div class="primary-button-small">
+                        Contact us
+                        <img src="/assets/img/arrow-rightF.png" alt="arrow-right" class="white-arrow"/>
+                    </div>
+                </a>
+            </div>
+            <div class="mobile" id="mobile-nav-toggle">
+                <i class="fa-solid fa-bars" id="header-bars"></i>
+                <i class="fa-solid fa-xmark hidden" id="header-x"></i>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<script>
+    document.getElementById("mobile-nav-toggle").addEventListener('click', () => {
+        document.getElementById("header-links").classList.toggle("show");
+        document.getElementById("header-bars").classList.toggle("hidden");
+        document.getElementById("header-x").classList.toggle("hidden");
+    });
+
+    document.getElementById("mobile-nav-features-toggle").addEventListener('click', () => {
+        document.getElementById("header-links-features").classList.toggle("show");
+    })
+</script>
+<main class="page-content" aria-label="Content">
+    
+
+
+<div class="blog">
+    <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+        <header>
+            <div class="row back-link-row">
+    <div class="main-page-link-container">
+        <a href="/pl/" class="main-page-link">
+            <i class="fa fa-arrow-left"></i>
+            Wszystkie wpisy
+        </a>
+    </div>
+    <div class="mobile">
+        
+<div class="post-language-options">
+    <a href="/pl/2021/09/08/kouncil-event-tracking-kafka.html " title="View in Polish" class=" selected ">
+        PL
+    </a>
+    <span class="separator">|</span>
+    <a href=" /2021/09/08/kouncil-event-tracking-kafka.html " title="View in English" class="">
+        ENG
+    </a>
+</div>
+
+
+    </div>
+</div>
+
+            <div class="row">
+                <div class="col-15">
+                    <h1 class="post-big-title p-name" itemprop="name headline">Event Tracking, czyli jak znaleźć igłę w stogu siana</h1>
+                </div>
+                <div class="col-5">
+                    <div class="desktop">
+                        
+<div class="post-language-options">
+    <a href="/pl/2021/09/08/kouncil-event-tracking-kafka.html " title="View in Polish" class=" selected ">
+        PL
+    </a>
+    <span class="separator">|</span>
+    <a href=" /2021/09/08/kouncil-event-tracking-kafka.html " title="View in English" class="">
+        ENG
+    </a>
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="post-info-container">
+                    <div class="post-metadata">
+    <div class="post-metadata-author">
+        <a href="/pl/authors/mmergo.html" class="author-name">
+            <img class="big-author-image" src="/assets/img/authors/mmergo.webp" alt="author">
+        </a>
+        <div class="post-info">
+            <a href="/pl/authors/mmergo.html" class="author-name-metadata">Marcin Mergo</a>
+            <span>
+8
+
+września
+
+
+
+2021
+</span>
+        </div>
+    </div>
+    <div class="social-media-sharing">
+        <div id="share-bar">
+    <div class="share-buttons">
+        <a href="https://www.facebook.com/sharer/sharer.php?u=https://blog.kouncil.io/2021/09/08/kouncil-event-tracking-kafka.html"
+           onclick="window.open(this.href, 'pop-up', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;"
+           title="Podziel się na Facebooku">
+            <i class="fa-brands fa-facebook-f share-button"></i>
+        </a>
+
+        <a href="https://twitter.com/intent/tweet?text=Event Tracking, czyli jak znaleźć igłę w stogu siana&url=https://blog.kouncil.io/2021/09/08/kouncil-event-tracking-kafka.html"
+           onclick="window.open(this.href, 'pop-up', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;"
+           title="Podziel się na Twitterze">
+            <i class="fa fa-twitter share-button"> </i>
+        </a>
+
+        <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://blog.kouncil.io/2021/09/08/kouncil-event-tracking-kafka.html&title=Event Tracking, czyli jak znaleźć igłę w stogu siana&source=Kouncil - blog techniczny"
+           onclick="window.open(this.href, 'pop-up', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;"
+           title="Podziel się na LinkedIn">
+            <i class="fa fa-linkedin share-button"></i>
+        </a>
+
+    </div>
+
+</div>
+
+    </div>
+</div>
+
+                </div>
+                <div style="flex:33%"></div>
+            </div>
+        </header>
+        <div itemprop="articleBody" class="post-content-container">
+            <div class="post-content-left-pane">
+                <div class="post-content">
+                    <div class=" post-highlight-image">
+                        <img src="/assets/img/posts/2021-09-08-kouncil-event-tracking-kafka/route.jpeg" alt="postimage"/>
+                    </div>
+                    <div id="myModal" class="modal">
+                        <i id="modal-close" class="fa fa-times close" aria-hidden="true"
+                           onclick="closeModal()"></i>
+                        <img class="modal-content">
+                    </div>
+                    <p>Systemy zbudowane na bazie Apache Kafka korzystają na ogół z więcej niż jednego topika. Często też eventy w ramach pojedynczego procesu pokonują drogę pomiędzy różnymi topikami - w niektórych przypadkach ogranicza się to jedynie do przepływu pomiędzy topikami w niezmienionej formie, ale równie często rekordy na kolejnych topikach ulegają modyfikacji, np. dodawane są dane, które będą potrzebne w kolejnych krokach procesu.
+Event tracking pozwala na prześledzenie oraz wizualizację drogi danego eventu, czy też procesu, przez topiki na Kafce.</p>
+
+<p>Weźmy za przykład system do wysyłania notyfikacji do użytkowników. Zanim dane powiadomienie będzie gotowe do wysyłki, potencjalnie będzie musiało przejść przez kilka topików, gdzie uzupełnione zostaną np. treść notyfikacji, czy kanał, którym powiadomienie zostanie przesłane.</p>
+
+<p><img src="/assets/img/posts/2021-09-08-kouncil-event-tracking-kafka/kouncil_kafka_flow.png" alt="Log tracing" />
+<span class="img-legend">Przykładowy przepływ na Kafce</span></p>
+
+<p>Jak wobec tego namierzyć drogę konkretnego procesu pośród milionów innych?</p>
+
+<h2 id="gdzieś-już-to-widziałem">Gdzieś już to widziałem</h2>
+<p>W istocie, problem nie jest nowy i sięga co najmniej mikroserwisów. Jeśli w obsługę danego żądania HTTP  zaangażowany jest więcej niż jeden mikroserwis, to potrzebujemy łatwego sposobu na prześledzenie logów związanych z obsługą tego żądania, niezależnie od tego, ile mikroserwisów w tym procesie uczestniczyło. Rozwiązanie tego problemu jest dobrze znane - kiedy żądanie pojawia się w systemie, np. kiedy trafia na API Gateway, wystarczy wygenerować losowy ciąg znaków, umieścić go w nagłówku HTTP, a następnie zadbać o przekazywanie tego nagłówka pomiędzy mikroserwisami, oraz wstrzyknięcie jego wartości do kontekstu logowania (MDC).</p>
+
+<p><img src="/assets/img/posts/2021-09-08-kouncil-event-tracking-kafka/kouncil_microservices_with_headers.png" alt="Log tracing" />
+<span class="img-legend">Śledzenie logów pomiędzy mikroserwisami</span></p>
+
+<p>Dzięki temu, wszystkie logi związane z danym żądaniem będą powiązane wygenerowanym na początku identyfikatorem. Wystarczy wyszukać ten identyfikator w jednym z popularnych agregatorów logów, np. Splunk (zakładając oczywiście, że tego rodzaju narzędzie jest dostępne) i w rezultacie otrzymamy logi powiązane z szukanym żądaniem.</p>
+
+<p>Ale co to ma wspólnego z Kafką?</p>
+
+<h2 id="nagłówki-na-ratunek">Nagłówki na ratunek</h2>
+
+<p>Okazuje się, że doświadczenia z korelacji logów ze świata mikroserwisów możemy wykorzystać do event trackingu na Kafce. Z rekordami na Kafce, podobnie jak z wiadomościami HTTP, mogą być związane nagłówki, a więc metadane w postaci klucz-wartość.</p>
+
+<p>Wykorzystując znany z mikroserwisów wzorzec, kiedy rekord pojawia się pierwszy raz w systemie, generujemy unikalny identyfikator oraz umieszczamy go w nagłówku. Następnie, analogicznie jak w przypadku mikroserwisów, kiedy event wędruje z jednego topika na inny, przekazujemy również powiązany z nim nagłówek korelacji. Idealnie, jeśli wartość tego nagłówka wstrzykujemy również do kontekstu logowania.</p>
+
+<p><img src="/assets/img/posts/2021-09-08-kouncil-event-tracking-kafka/kouncil_kafka_headers.png" alt="Event tracking" />
+<span class="img-legend">Przekazywanie nagłówka pomiędzy topikami na Kafce</span></p>
+
+<p>Nie da się jednak nie zauważyć, że samo przekazywanie nagłówków pomiędzy topikami nie stanowi nawet połowy sukcesu. 
+Prawdziwy problem leży w znalezieniu rekordów z tą konkretną wartością nagłówka pośród setek topików i miliardów rekordów.</p>
+
+<p>Jak więc się za to zabrać? Trzeba zacząć od zadania sobie trzech pytań:</p>
+
+<ul>
+  <li><strong>Co?</strong> - czego tak naprawdę szukamy? Jakich nagłówków, z jakimi wartościami?</li>
+  <li><strong>Gdzie?</strong> - które topiki weźmiemy pod uwagę? przeszukiwanie wszystkich topików często będzie nadmiarowe, na ogół można ograniczyć się jedynie do tych związanych z pewną funkcjonalnością lub przepływem.</li>
+  <li><strong>Kiedy?</strong> - w przypadku kiedy na Kafce znajdują się miliardy rekordów, przeszukanie ich wszystkich zajęłoby wieki. W wielu jednak przypadkach procesy potrzebują kilku sekund lub maksymalnie kilku minut aby w pełni przejść przez Kafkę, co oznacza, że na ogół można zawęzić zakres wyszukiwania do 5, 15 minut lub np. godziny.</li>
+</ul>
+
+<p>Co oczywiste, im mniejszy zakres poszukiwań, tym sprawniej ono pójdzie.</p>
+
+<p>Jak zatem wziąć te trzy pytania i faktycznie prześledzić drogę procesu przez Kafkę? Out of the box, nie istnieją na Kafce mechanizmy, które pozwoliłby to prosto zrealizować.</p>
+
+<h2 id="event-tracking-w-praktyce">Event Tracking w praktyce</h2>
+
+<p>Tak się jednak składa, że stworzone przez nas narzędzie, <a href="https://kouncil.io">Kouncil</a>, oferuje dokładnie taką funkcjonalność, rozszerzoną o dodatkowe opcje oraz optymalizacje. Zaglądając do zakładki <strong>Track</strong> znajdziemy filtry pozwalające wprost odpowiedzieć na powyższe trzy pytania.</p>
+
+<ul>
+  <li>Po pierwsze, możemy określić jaki nagłówek z jaką zawartością jest dla nas interesujący. Możemy też wskazać sposób matchowania szukanej wartości nagłówka z faktyczną - nie musi to być dopasowanie 1 do 1. Do wyboru są takie operatory jak <em>równa się</em>, <em>nie równa się</em>, <em>zawiera się</em>, <em>nie zawiera się</em>, a nawet wyrażenia regularne.</li>
+  <li>Po drugie, istnieje możliwość określenia zbioru przeszukiwanych topików - w przypadku, kiedy na klastrze znajdują się setki lub tysiące topików nie ma potrzeby ręcznie wyszukiwać ich na liście - komponent wyboru topika obsługuje filtrowanie.</li>
+  <li>Po trzecie, mamy możliwość podania przedziału czasowego, który nas interesuje.</li>
+</ul>
+
+<p><img src="/assets/img/posts/2021-09-08-kouncil-event-tracking-kafka/kouncil_track_filter.png" alt="Track filter" />
+<span class="img-legend">Filtry zakładki Track</span></p>
+
+<p>Jednak każdorazowe wypełnianie tych pól ręcznie w końcu okaże się być co najmniej niewygodne.</p>
+
+<p>Wróćmy więc do przykładu wysyłki powiadomień z początku tego artykułu. Przyjmijmy, że istnieją na klastrze topiki odpowiedzialne za przetwarzanie wysyłki powiadomień: <em>notification-input</em>, gdzie powiadomienia zaczynają swoje życie, oraz inne, przez które eventy przepływają w zależności od przypadku użycia. Tymi topikami mogą być <em>notification-content</em>, <em>-channel</em>, <em>-template</em>, <em>-delivery</em> itp., na których eventy mogą być uzupełniane o potrzebne dane. Na przykład na topic <em>notification-channel</em> wpadną eventy, dla których trzeba wyznaczyć kanał powiadomienia.</p>
+
+<p>Zajrzyjmy do topika notification-input:</p>
+
+<p><img src="/assets/img/posts/2021-09-08-kouncil-event-tracking-kafka/kouncil_notification_input.png" alt="Track filter" />
+<span class="img-legend">Topic notification-input</span></p>
+
+<p>Załóżmy, że chcemy prześledzić drogę rekordu o kluczu <strong>vFeYAx</strong>. Wystarczy, że klikniemy w rekord, aby podejrzeć jego szczegóły, a następnie na interesujący nas nagłówek.</p>
+
+<p><img src="/assets/img/posts/2021-09-08-kouncil-event-tracking-kafka/kouncil_event_header.png" alt="Track filter" />
+<span class="img-legend">Wybór nagłówka</span></p>
+
+<p>Zostaniemy automatycznie przeniesieni na zakładkę Event Trackingu, gdzie pola filtra będą już za nas wypełnione na podstawie wybranego rekordu! Jedyne co musimy zrobić, to dodać interesujące nas topiki, gdyż domyślnie wybrany będzie jedynie ten, na którym znajduje się event, którego drogę chcemy prześledzić.</p>
+
+<p><img src="/assets/img/posts/2021-09-08-kouncil-event-tracking-kafka/kouncil_track_filter_filled.png" alt="Track filter" />
+<span class="img-legend">Automatycznie wypełniony filtr Event Trackingu</span></p>
+
+<p>Teraz pozostało nam już tylko kliknąć <strong>Track events</strong> i obserwować jak w czasie rzeczywistym Kouncil odnajduje rekordy o podanym nagłówku. Sortując wyniki po czasie widzimy nie tylko kiedy oraz przez jakie topiki przeszedł dany proces, ale możemy też podejrzeć rekord na każdym etapie procesu.</p>
+
+<p><img src="/assets/img/posts/2021-09-08-kouncil-event-tracking-kafka/kouncil_event_tracking_result.png" alt="Track filter" />
+<span class="img-legend">Wynik Event Trackingu</span></p>
+
+<p>Taki sposób analizy przepływu procesów na Kafce pozwala zaoszczędzić sporo czasu, zwłaszcza w bardziej zawiłych procesach, kiedy rekordy mogą powtórnie trafić na topic, na którym znajdowały się wcześniej lub podczas analizy błędnych sytuacji, kiedy proces mógł trafić na topiki służące do obsługi błędów. Wyszukanie analogicznych informacji w logach aplikacji, choć możliwe, z reguły okazuje się być bardziej czasochłonne, szczególnie, jeśli konsumentami danego procesu są moduły należące do różnych systemów i nie istnieje prosta możliwość zbiorczego przeszukania ich logów.</p>
+
+<p>Co ważne, Event Tracking możemy zacząć od dowolnego miejsca w procesie - może to być jego początek, tak jak w przypadku topika <em>notification-input</em>, jednak nic nie stało na przeszkodzie, żeby analizę rozpocząć od samego końca przepływu - topika <em>notification-status</em> - efekt byłby dokładnie ten sam!</p>
+
+<h2 id="kouncil">Kouncil</h2>
+
+<p>Kouncil jest darmowy, a jego źródła wraz z instrukcją uruchomienia można znaleźć <a href="https://github.com/consdata/kouncil">na naszym githubie</a>. Proces jego uruchomienia jest trywialny i <a href="https://github.com/consdata/kouncil#quick-start">sprowadza się do pojedynczej komendy docker run</a>, w ramach której trzeba jedynie wskazać namiar na którykolwiek z węzłów klastra Kafki. Jedyne czego Kouncil wymaga do obsługi Event Trackingu to zapewnienie istnienia nagłówków w wiadomościach, a resztę, związaną z przeszukiwaniem topików, bierze już na siebie.</p>
+
+                    
+                </div>
+            </div>
+            <div class="sidebar">
+                
+<div class="sidebar-container">
+    <div class="sidebar-title">
+        Więcej na blogu
+    </div>
+    <div class="sidebar-latest-posts-container"><div class="sidebar-post">
+            <a href="/pl/2024/11/26/kouncil-1.9.html" lang="pl">
+                <span class="sidebar-post-title">
+                    Kouncil 1.9
+                </span>
+                <span class="sidebar-post-content">
+                    Dzięki wprowadzeniu połączenia z bazą danych, wersja 1.9 Kouncil umożliwia kolejne usprawnienia, które wcześniej nie były możliwe do zrealizowania. W pierwszej kolejności dodaliśmy możliwość zarządzania klastrami Kafki oraz grupami i uprawnieniami z poziomu aplikacji. Dodatkowo od wersji 1.9 możliwe będzie logowanie SSO dzięki integracji z Okta.
+                </span>
+                <a href="/pl/2024/11/26/kouncil-1.9.html">
+    <div class="read-more">
+        <span>Czytaj dalej</span>
+        <img src="/assets/img/arrow-right.svg" alt="arrow" />
+    </div>
+</a>
+
+            </a>
+        </div><div class="sidebar-post">
+            <a href="/pl/2024/06/13/kouncil-1.8.html" lang="pl">
+                <span class="sidebar-post-title">
+                    Kouncil 1.8
+                </span>
+                <span class="sidebar-post-content">
+                    W wersji 1.8 Kouncil wprowadziliśmy kilka kluczowych funkcjonalności, jak zarządzanie topicami i schemami. Rozbudowana została również obsługa schem typu AVRO.
+                </span>
+                <a href="/pl/2024/06/13/kouncil-1.8.html">
+    <div class="read-more">
+        <span>Czytaj dalej</span>
+        <img src="/assets/img/arrow-right.svg" alt="arrow" />
+    </div>
+</a>
+
+            </a>
+        </div><div class="sidebar-post">
+            <a href="/pl/2024/04/24/kafka-aws-msk.html" lang="pl">
+                <span class="sidebar-post-title">
+                    Kouncil podłączenie pod Amazon MSK
+                </span>
+                <span class="sidebar-post-content">
+                    Czy kiedykolwiek zastanawiałeś się, jak utworzyć i podłączyć się pod klaster Amazon MSK? W tym poście pokażemy Ci jak to zrobić na dwa sposoby.
+                </span>
+                <a href="/pl/2024/04/24/kafka-aws-msk.html">
+    <div class="read-more">
+        <span>Czytaj dalej</span>
+        <img src="/assets/img/arrow-right.svg" alt="arrow" />
+    </div>
+</a>
+
+            </a>
+        </div></div>
+</div>
+
+            </div>
+        </div>
+    </article>
+    <div class="author-bio">
+    
+    <div class="author-image">
+        <a href="/pl/authors/mmergo.html" class="author-name">
+            <img src="/assets/img/authors/mmergo.webp" alt="author" width="120" height="120">
+        </a>
+    </div>
+    
+    <div class="card">
+        <div class="header">
+            
+            <a href="/pl/authors/mmergo.html" class="author-name">
+                Marcin Mergo
+            </a>
+            
+        </div>
+        <div class="content">
+            
+                
+                    <div class="bio">A graduate of the Poznań University of Technology, od lat związany z tworzeniem oprogramowania dla sektora finansowego. W trakcie swojej kariery tworzył systemy dla największych banków w Polsce, zarówno z obszaru korporacyjnego, jak i detalicznego. Posiada doświadczenie w dostarczaniu rozwiązań dla branży energetycznej oraz sektora public. Wieloletni pracownik, Tech Lead, Architekt, oraz członek zespołu bezpieczeństwa firmy Consdata. Współorganizator oraz prelegent spotkań OWASPowych. Entuzjasta zdrowego rozsądku, aspirujący game developer.</div>
+                
+            
+        </div>
+    </div>
+</div>
+<div class="author-bio-mobile">
+    <div class="header">
+        
+        <div class="author-image">
+            <img src="/assets/img/authors/mmergo.webp">
+        </div>
+        
+    </div>
+    <div class="content">
+        <div class="name-wrapper">
+            
+            <div class="author-name">Marcin Mergo</div>
+            
+        </div>
+        
+            
+            
+                <div class="bio">A graduate of the Poznań University of Technology, od lat związany z tworzeniem oprogramowania dla sektora finansowego. W trakcie swojej kariery tworzył systemy dla największych banków w Polsce, zarówno z obszaru korporacyjnego, jak i detalicznego. Posiada doświadczenie w dostarczaniu rozwiązań dla branży energetycznej oraz sektora public. Wieloletni pracownik, Tech Lead, Architekt, oraz członek zespołu bezpieczeństwa firmy Consdata. Współorganizator oraz prelegent spotkań OWASPowych. Entuzjasta zdrowego rozsądku, aspirujący game developer.</div>
+            
+        
+    </div>
+</div>
+
+    <div class="post-post-section-mobile">
+        
+<div class="sidebar-container">
+    <div class="sidebar-title">
+        Więcej na blogu
+    </div>
+    <div class="sidebar-latest-posts-container"><div class="sidebar-post">
+            <a href="/pl/2024/11/26/kouncil-1.9.html" lang="pl">
+                <span class="sidebar-post-title">
+                    Kouncil 1.9
+                </span>
+                <span class="sidebar-post-content">
+                    Dzięki wprowadzeniu połączenia z bazą danych, wersja 1.9 Kouncil umożliwia kolejne usprawnienia, które wcześniej nie były możliwe do zrealizowania. W pierwszej kolejności dodaliśmy możliwość zarządzania klastrami Kafki oraz grupami i uprawnieniami z poziomu aplikacji. Dodatkowo od wersji 1.9 możliwe będzie logowanie SSO dzięki integracji z Okta.
+                </span>
+                <a href="/pl/2024/11/26/kouncil-1.9.html">
+    <div class="read-more">
+        <span>Czytaj dalej</span>
+        <img src="/assets/img/arrow-right.svg" alt="arrow" />
+    </div>
+</a>
+
+            </a>
+        </div><div class="sidebar-post">
+            <a href="/pl/2024/06/13/kouncil-1.8.html" lang="pl">
+                <span class="sidebar-post-title">
+                    Kouncil 1.8
+                </span>
+                <span class="sidebar-post-content">
+                    W wersji 1.8 Kouncil wprowadziliśmy kilka kluczowych funkcjonalności, jak zarządzanie topicami i schemami. Rozbudowana została również obsługa schem typu AVRO.
+                </span>
+                <a href="/pl/2024/06/13/kouncil-1.8.html">
+    <div class="read-more">
+        <span>Czytaj dalej</span>
+        <img src="/assets/img/arrow-right.svg" alt="arrow" />
+    </div>
+</a>
+
+            </a>
+        </div><div class="sidebar-post">
+            <a href="/pl/2024/04/24/kafka-aws-msk.html" lang="pl">
+                <span class="sidebar-post-title">
+                    Kouncil podłączenie pod Amazon MSK
+                </span>
+                <span class="sidebar-post-content">
+                    Czy kiedykolwiek zastanawiałeś się, jak utworzyć i podłączyć się pod klaster Amazon MSK? W tym poście pokażemy Ci jak to zrobić na dwa sposoby.
+                </span>
+                <a href="/pl/2024/04/24/kafka-aws-msk.html">
+    <div class="read-more">
+        <span>Czytaj dalej</span>
+        <img src="/assets/img/arrow-right.svg" alt="arrow" />
+    </div>
+</a>
+
+            </a>
+        </div></div>
+</div>
+
+    </div><div id="disqus_thread"></div>
+<script>
+    function readCookie(name) {
+        const nameEQ = name + "=";
+        const ca = document.cookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+    if (readCookie('cookie-notice-dismissed') === 'true') {
+        var disqus_config = function () {
+            this.page.url = 'https://blog.kouncil.io/2021/09/08/kouncil-event-tracking-kafka.html';
+            this.page.identifier = 'https://blog.kouncil.io/2021/09/08/kouncil-event-tracking-kafka.html';
+        };
+
+        (function () {
+            var d = document, s = d.createElement('script');
+
+            s.src = 'https://kouncil-blog.disqus.com/embed.js';
+
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    }
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments
+    powered by Disqus.</a></noscript></div>
+<script>
+    function zoomImage($event) {
+        const modal = document.getElementById('myModal');
+        modal.getElementsByTagName('img')[0].src = $event.target.src;
+        modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('myModal').style.display = 'none';
+    }
+
+    const postImages = document.querySelectorAll('.post-content img');
+    postImages.forEach(x => x.addEventListener('click', zoomImage));
+</script>
+
+</main><footer>
+    <div class="footer-container">
+        <div class="footer-item company">
+            <div class="label">
+                <a href="https://kouncil.io/" target="_blank" rel="noreferrer">
+                    <img src="/assets/img/kouncil-logo.png"/>
+                </a>
+            </div>
+        </div>
+        <div class="footer-item">
+            <div class="item-content">
+                <p>Contact</p>
+                <p>kouncil@consdata.com</p>
+                <p>+48 61 41 51 000</p>
+            </div>
+        </div>
+        <div class="footer-item">
+            <div class="item-content">
+                <p>Office</p>
+                <p>K9Office, Krysiewicza 9/17</p>
+                <p>61-825 Poznań, Poland</p>
+            </div>
+        </div>
+        <div class="footer-item">
+            <div class="item-content">
+                <p>Features</p>
+                <a href="https://kouncil.io/apache-kafka-monitoring"><p>Apache Kafka Monitoring</p></a>
+                <a href="https://kouncil.io/explore-data"><p>Explore Data</p></a>
+                <a href="https://kouncil.io/protect-data/"><p>Protect data</p></a>
+            </div>
+        </div>
+        <div class="footer-item links">
+            <div class="item-content">
+                <a class="footer-link" href="#"><p>Blog</p></a>
+                <a class="footer-link" href="https://docs.kouncil.io/"><p>Documentation</p></a>
+                <a class="footer-link" href="https://kouncil-demo.web.app/#/topics"><p>Demo</p></a>
+                <a class="footer-link" href="https://kouncil.io/pricing/"><p>Pricing</p></a>
+            </div>
+        </div>
+    </div>
+    <div class="full-width-footer">
+        <div class="copyright-container desktop">
+    <div class="copyright">
+        <div class="copyright-text">
+            <span>Copyright © 2024 Kouncil. All rights reserved.</span>
+            <div class="copyright-links">
+                <span class="separator">|</span>
+                <a href="https://kouncil.io/privacy-policy/">Privacy Policy</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <div class="copyright-container mobile">
+    <div class="copyright">
+        <div class="copyright-text">
+            <div class="copyright-links">
+                <div>
+                    <a>Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+        <span>Copyright © 2024 Kouncil. All rights reserved.</span>
+    </div>
+</div>
+
+    </div>
+</footer>
+<div class="cookie-notice" id="cookie-notice">
+    <span>
+        
+        Używamy plików cookie oraz skryptów podmiotów trzecich do polepszania funkcjonowania tej strony
+    </span>
+    <a id="cookie-notice-accept" class="primary-button-small consent-button">OK</a>
+    <i onclick="hideConsent()" class="close-consent fa fa-times close"></i>
+    <noscript><img height="1" width="1" style="display:none"
+                   src="https://www.facebook.com/tr?id=300808861525851&ev=PageView&noscript=1"
+    /></noscript>
+</div>
+
+<script>
+    function createCookie(name, value, days) {
+        let expires = "";
+        if (days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + value + expires + "; path=/";
+    }
+
+    function readCookie(name) {
+        const nameEQ = name + "=";
+        const ca = document.cookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+    function eraseCookie(name) {
+        createCookie(name, "", -1);
+    }
+
+    function hideConsent() {
+        document.getElementById('cookie-notice').style.display = 'none';
+    }
+
+    if (readCookie('cookie-notice-dismissed') === 'true') {!function (f, b, e, v, n, t, s) {
+    if (f.fbq) return;
+    n = f.fbq = function () {
+        n.callMethod ?
+            n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+    };
+    if (!f._fbq) f._fbq = n;
+    n.push = n;
+    n.loaded = !0;
+    n.version = '2.0';
+    n.queue = [];
+    t = b.createElement(e);
+    t.async = !0;
+    t.src = v;
+    s = b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t, s)
+}(window, document, 'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '300808861525851');
+fbq('track', 'PageView');
+} else {
+        document.getElementById('cookie-notice').style.display = 'flex';
+    }
+
+    document.getElementById('cookie-notice-accept').addEventListener("click", function () {
+        createCookie('cookie-notice-dismissed', 'true', 31);
+        hideConsent();
+        location.reload();
+    });
+</script>
+
+</body>
+</html>
